@@ -331,11 +331,11 @@ tbody td.tmono { font-family: 'IBM Plex Mono',monospace; font-size: 12px; }
 
 <!-- ══ TABS ══════════════════════════════════════════════════════════════ -->
 <div class="nav-wrap">
-  <button class="nav-tab active" onclick="show('eval')">⭐ التقييم</button>
-  <button class="nav-tab" onclick="show('po')">📋 أوامر الشراء</button>
-  <button class="nav-tab" onclick="show('rec')">📦 الاستلام</button>
-  <button class="nav-tab" onclick="show('inv')">🧾 الفواتير</button>
-  <button class="nav-tab" onclick="show('recon')">⚖️ التسويات</button>
+  <button class="nav-tab active" onclick="show('eval',this)">⭐ التقييم</button>
+  <button class="nav-tab" onclick="show('po',this)">📋 أوامر الشراء</button>
+  <button class="nav-tab" onclick="show('rec',this)">📦 الاستلام</button>
+  <button class="nav-tab" onclick="show('inv',this)">🧾 الفواتير</button>
+  <button class="nav-tab" onclick="show('recon',this)">⚖️ التسويات</button>
 </div>
 
 <!-- ══ CONTENT ════════════════════════════════════════════════════════════ -->
@@ -1504,11 +1504,11 @@ function recalc() {
 // ══════════════════════════════════════════════════════════════════════════
 const panelMap={eval:'panel-eval',po:'panel-po',rec:'panel-rec',inv:'panel-inv',recon:'panel-recon'};
 
-function show(id) {
+function show(id, btn) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(panelMap[id]).classList.add('active');
-  event.target.classList.add('active');
+  if(btn) btn.classList.add('active');
 }
 
 // ══════════════════════════════════════════════════════════════════════════
