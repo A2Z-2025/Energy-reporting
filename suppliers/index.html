@@ -331,11 +331,11 @@ tbody td.tmono { font-family: 'IBM Plex Mono',monospace; font-size: 12px; }
 
 <!-- ══ TABS ══════════════════════════════════════════════════════════════ -->
 <div class="nav-wrap">
-  <button class="nav-tab active" onclick="show('eval',this)">⭐ التقييم</button>
-  <button class="nav-tab" onclick="show('po',this)">📋 أوامر الشراء</button>
-  <button class="nav-tab" onclick="show('rec',this)">📦 الاستلام</button>
-  <button class="nav-tab" onclick="show('inv',this)">🧾 الفواتير</button>
-  <button class="nav-tab" onclick="show('recon',this)">⚖️ التسويات</button>
+  <button class="nav-tab active" onclick="show('eval')">⭐ التقييم</button>
+  <button class="nav-tab" onclick="show('po')">📋 أوامر الشراء</button>
+  <button class="nav-tab" onclick="show('rec')">📦 الاستلام</button>
+  <button class="nav-tab" onclick="show('inv')">🧾 الفواتير</button>
+  <button class="nav-tab" onclick="show('recon')">⚖️ التسويات</button>
 </div>
 
 <!-- ══ CONTENT ════════════════════════════════════════════════════════════ -->
@@ -1504,11 +1504,11 @@ function recalc() {
 // ══════════════════════════════════════════════════════════════════════════
 const panelMap={eval:'panel-eval',po:'panel-po',rec:'panel-rec',inv:'panel-inv',recon:'panel-recon'};
 
-function show(id, btn) {
+function show(id) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(panelMap[id]).classList.add('active');
-  if(btn) btn.classList.add('active');
+  event.target.classList.add('active');
 }
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -1570,24 +1570,18 @@ function saveDaily() {
   const mm    = String(d.getMonth()+1).padStart(2,'0');
   const yyyy  = d.getFullYear();
   const fname = `مراجعة_الموردين_${yyyy}-${mm}-${dd}.html`;
-
   const currentHTML = document.documentElement.outerHTML
-    .replace(/<title>.*?<\/title>/,
-      `<title>مراجعة الموردين — ${dd}/${mm}/${yyyy}</title>`)
-    .replace(/id="hdate">.*?<\/span>/,
-      `id="hdate">${formatArabic(d)}</span>`);
-
-  // Download locally
+    .replace(/<title>.*?<\/title>/,`<title>مراجعة الموردين — ${dd}/${mm}/${yyyy}</title>`)
+    .replace(/id="hdate">.*?<\/span>/,`id="hdate">${formatArabic(d)}</span>`);
   const blob = new Blob([currentHTML], {type:'text/html;charset=utf-8'});
   const a    = document.createElement('a');
   a.href     = URL.createObjectURL(blob);
   a.download = fname;
   a.click();
   URL.revokeObjectURL(a.href);
-
-  // Push to GitHub Pages
   pushToGitHub(currentHTML, d);
 }
+
 
 async function pushToGitHub(htmlContent, d) {
   const owner  = 'A2Z-2025';
@@ -1598,62 +1592,93 @@ async function pushToGitHub(htmlContent, d) {
   const mm     = String(d.getMonth()+1).padStart(2,'0');
   const yyyy   = d.getFullYear();
 
-  // Get token from localStorage or prompt once
   let token = localStorage.getItem('gh_token');
   if(!token) {
-    token = prompt('🔑 أدخلي GitHub Token (مرة واحدة فقط):');
+    token = prompt('🔑 أدخلي GitHub Token:');
     if(!token) return;
     localStorage.setItem('gh_token', token);
   }
 
   const t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A3A63;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A3A63;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
   t.textContent = '⏳ جارٍ الرفع على GitHub...';
   document.body.appendChild(t);
 
   try {
-    // Get SHA of existing file (needed for update)
     const getRes  = await fetch(apiUrl, {headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json'}});
     const getData = await getRes.json();
     const sha     = getData.sha || null;
-
-    // Base64 encode
     const encoded = btoa(unescape(encodeURIComponent(htmlContent)));
-
-    // Push
-    const putRes = await fetch(apiUrl, {
+    const putRes  = await fetch(apiUrl, {
       method:'PUT',
       headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify({
-        message:`تقرير موردين ${dd}/${mm}/${yyyy}`,
-        content: encoded,
-        ...(sha ? {sha} : {})
-      })
+      body: JSON.stringify({message:`تقرير موردين ${dd}/${mm}/${yyyy}`,content:encoded,...(sha?{sha}:{})})
     });
-
     t.remove();
     if(putRes.ok) {
       const s = document.createElement('div');
-      s.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A6B3C;color:#fff;padding:14px 28px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)';
-      s.innerHTML = `✅ تم الرفع بنجاح!<br><a href="https://a2z-2025.github.io/Energy-reporting/suppliers/" target="_blank" style="color:#A3D977;font-size:12px">https://a2z-2025.github.io/Energy-reporting/suppliers/</a>`;
+      s.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A6B3C;color:#fff;padding:14px 28px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;text-align:center';
+      s.innerHTML = `✅ تم الرفع!<br><a href="https://a2z-2025.github.io/Energy-reporting/suppliers/" target="_blank" style="color:#A3D977;font-size:12px">a2z-2025.github.io/Energy-reporting/suppliers/</a>`;
       document.body.appendChild(s);
-      setTimeout(()=>s.remove(), 7000);
+      setTimeout(()=>s.remove(),7000);
     } else {
-      const errData = await putRes.json();
-      if(errData.message && errData.message.includes('Bad credentials')) {
-        localStorage.removeItem('gh_token');
-        throw new Error('token منتهي — هيطلب token جديد في المرة الجاية');
-      }
-      throw new Error('فشل الرفع');
+      const err = await putRes.json();
+      if(err.message?.includes('Bad credentials')) localStorage.removeItem('gh_token');
+      throw new Error(err.message||'فشل');
     }
   } catch(e) {
     t.remove();
     const er = document.createElement('div');
     er.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#8B1A1A;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
-    er.textContent = `⚠️ ${e.message || 'فشل الرفع'} — تم الحفظ محلياً`;
+    er.textContent = `⚠️ ${e.message||'فشل الرفع'} — تم الحفظ محلياً`;
     document.body.appendChild(er);
-    setTimeout(()=>er.remove(), 5000);
+    setTimeout(()=>er.remove(),5000);
   }
 }
 
->
+function showDeployModal(fname, d) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position:fixed;inset:0;background:rgba(0,0,0,.6);
+    z-index:9999;display:flex;align-items:center;justify-content:center;
+  `;
+  overlay.innerHTML = `
+    <div style="
+      background:#fff;border-radius:16px;padding:32px;
+      max-width:520px;width:90%;direction:rtl;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+    ">
+      <div style="font-size:32px;text-align:center;margin-bottom:12px">✅</div>
+      <h2 style="font-size:18px;font-weight:800;color:#0B1F3A;text-align:center;margin-bottom:6px">
+        تم تحميل نسخة اليوم
+      </h2>
+      <p style="font-size:13px;color:#718096;text-align:center;margin-bottom:24px">
+        اسم الملف: <strong style="color:#C8922A">${fname}</strong><br>تاريخ التقرير: <strong style="color:#1A6B3C">${formatDisplay(d)}</strong>
+      </p>
+      <div style="background:#F7F8FA;border-radius:10px;padding:16px;margin-bottom:20px">
+        <p style="font-size:12px;font-weight:700;color:#0B1F3A;margin-bottom:10px">🚀 لنشره على Netlify:</p>
+        <ol style="font-size:12px;color:#4A5568;line-height:2;padding-right:16px">
+          <li>افتحي <strong>app.netlify.com</strong></li>
+          <li>اختاري مشروعك الحالي</li>
+          <li>اضغطي <strong>Deploys</strong> ثم <strong>Drag & Drop</strong></li>
+          <li>ارمي ملف <strong>${fname}</strong> في المربع</li>
+          <li>✅ نفس الـ URL بيتحدث تلقائياً</li>
+        </ol>
+      </div>
+      <div style="background:#E6F4EE;border-radius:8px;padding:12px;margin-bottom:20px;font-size:12px;color:#1A6B3C">
+        💡 <strong>نصيحة:</strong> احتفظي بكل الملفات في فولدر باسم "تقارير الموردين" — هيبقى عندك أرشيف يومي كامل
+      </div>
+      <button onclick="this.closest('div').parentElement.remove()" style="
+        width:100%;padding:12px;background:#0B1F3A;color:#fff;
+        border:none;border-radius:8px;font-size:14px;font-weight:700;
+        cursor:pointer;font-family:inherit;
+      ">حسناً، فهمت</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+}
+</script>
+
+
+</body></html>
