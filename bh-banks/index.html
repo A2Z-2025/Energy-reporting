@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BH — مراجعة البنوك والخزنة والعهد</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0D1117;
+  --ink2:   #1C2433;
+  --slate:  #4A5568;
+  --mist:   #718096;
+  --fog:    #A0AEC0;
+  --wire:   #E2E8F0;
+  --paper:  #F7F8FA;
+  --snow:   #FFFFFF;
+
+  --bh-primary:  #1A3A63;
+  --bh-gold:     #C8922A;
+  --bh-gold-l:   #FDF6E3;
+  --bh-gold-m:   #F6E0A8;
+
+  --jade:   #0F7B5B;  --jade-l:  #E6F4EE;
+  --coral:  #C0392B;  --coral-l: #FCECEA;
+  --amber:  #926B00;  --amber-l: #FFF8E1;
+  --blue:   #1A56DB;
+
+  --r8:4px; --r12:8px; --r16:12px;
+  --sh: 0 1px 4px rgba(13,17,23,.08), 0 4px 16px rgba(13,17,23,.06);
+  --sh-lg: 0 8px 40px rgba(13,17,23,.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;direction:rtl;}
+
+/* ── TOP BAR ─────────────────────────────────────────────────────────── */
+.topbar{
+  background:linear-gradient(135deg,var(--bh-primary) 0%,#0D2240 100%);
+  border-bottom:3px solid var(--bh-gold);
+  padding:20px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.bh-logo{
+  background:var(--bh-gold);color:var(--bh-primary);
+  font-size:11px;font-weight:800;letter-spacing:.5px;
+  padding:6px 10px;border-radius:6px;white-space:nowrap;
+}
+.topbar-title h1{font-size:17px;font-weight:700;color:var(--snow);}
+.topbar-title p{font-size:11px;color:var(--fog);margin-top:2px;}
+.topbar-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.meta-pill{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;padding:6px 14px;font-size:12px;color:var(--snow);
+  display:flex;gap:8px;
+}
+.meta-pill span{color:var(--bh-gold-m);font-weight:500;}
+.btn{
+  border:none;border-radius:8px;padding:8px 18px;
+  font-family:inherit;font-size:13px;font-weight:700;
+  cursor:pointer;transition:opacity .2s;white-space:nowrap;
+}
+.btn-gold{background:var(--bh-gold);color:var(--bh-primary);}
+.btn-green{background:#0F7B5B;color:#fff;}
+.btn:hover{opacity:.85;}
+
+/* ── CONTENT ─────────────────────────────────────────────────────────── */
+.content{max-width:1200px;margin:0 auto;padding:28px 24px 80px;}
+
+/* ── SCORE HERO ──────────────────────────────────────────────────────── */
+.score-hero{
+  background:linear-gradient(135deg,var(--bh-primary),#0D2240);
+  border-radius:16px;padding:32px;margin-bottom:24px;
+  display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;
+  box-shadow:var(--sh-lg);position:relative;overflow:hidden;
+}
+.score-hero::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 40px,
+    rgba(200,146,42,.05) 40px,rgba(200,146,42,.05) 80px);
+}
+.score-donut{
+  width:140px;height:140px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;flex-shrink:0;z-index:1;
+  background:conic-gradient(var(--dc,#ccc) calc(var(--dp,0)*1%),rgba(255,255,255,.1) 0);
+}
+.score-donut::before{
+  content:'';position:absolute;inset:16px;
+  background:var(--bh-primary);border-radius:50%;
+}
+.score-donut-val{
+  position:relative;z-index:1;text-align:center;
+}
+.score-donut-val .big{font-size:36px;font-weight:800;color:#fff;font-family:'IBM Plex Mono',monospace;display:block;}
+.score-donut-val .sm{font-size:12px;color:var(--bh-gold-m);font-weight:600;}
+.score-info{z-index:1;}
+.score-info h2{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
+.score-info .subject{font-size:14px;color:var(--bh-gold-m);margin-bottom:16px;}
+.grade-badge{
+  display:inline-block;padding:6px 20px;border-radius:20px;
+  font-size:16px;font-weight:800;margin-bottom:16px;
+}
+.axes-mini{display:flex;flex-direction:column;gap:8px;}
+.axis-mini-row{display:grid;grid-template-columns:120px 1fr 48px;gap:10px;align-items:center;}
+.axis-mini-lbl{font-size:11px;color:rgba(255,255,255,.7);font-weight:600;}
+.axis-mini-track{height:5px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;}
+.axis-mini-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.axis-mini-score{font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:#fff;text-align:left;}
+
+/* ── CARD ────────────────────────────────────────────────────────────── */
+.card{background:var(--snow);border-radius:12px;box-shadow:var(--sh);margin-bottom:20px;overflow:hidden;}
+.card-head{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 20px;border-bottom:1px solid var(--wire);background:var(--paper);
+}
+.card-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--bh-primary);color:var(--bh-gold);
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+}
+.card-head h2{font-size:14px;font-weight:700;}
+.card-head p{font-size:11px;color:var(--mist);margin-top:1px;}
+.card-body{padding:18px 20px;}
+
+/* ── AXIS EVAL TABLE ─────────────────────────────────────────────────── */
+.axis-table{width:100%;border-collapse:collapse;font-size:13px;}
+.axis-table thead tr{background:var(--bh-primary);}
+.axis-table thead th{padding:10px 14px;color:#fff;font-size:11px;font-weight:700;text-align:center;white-space:nowrap;}
+.axis-table thead th:first-child{text-align:right;}
+.axis-table tbody tr{border-bottom:1px solid var(--wire);transition:background .12s;}
+.axis-table tbody tr:last-child{border-bottom:none;}
+.axis-table tbody tr:hover{background:var(--bh-gold-l);}
+.axis-table tbody td{padding:12px 14px;vertical-align:middle;}
+.axis-table tbody td.tname{font-weight:700;color:var(--bh-primary);}
+.axis-table tbody td.tcenter{text-align:center;}
+.axis-table tbody td.tnum{text-align:center;font-family:'IBM Plex Mono',monospace;font-weight:700;}
+.tfoot-row td{background:var(--bh-primary)!important;color:var(--bh-gold)!important;font-weight:700;border-top:2px solid var(--bh-gold);}
+
+/* ── BADGE ───────────────────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.badge.ok  {background:var(--jade-l); color:var(--jade);}
+.badge.warn{background:var(--amber-l);color:var(--amber);}
+.badge.bad {background:var(--coral-l);color:var(--coral);}
+.badge.na  {background:var(--wire);   color:var(--mist);}
+
+/* ── INPUT / SELECT ──────────────────────────────────────────────────── */
+.sel{
+  width:100%;padding:5px 8px;border:1.5px solid var(--wire);border-radius:6px;
+  font-family:inherit;font-size:12px;color:var(--blue);background:#F0F6FF;
+  cursor:pointer;direction:rtl;transition:border-color .15s;
+}
+.sel:focus{outline:none;border-color:var(--bh-primary);}
+.sel.ok  {background:var(--jade-l); color:var(--jade); border-color:var(--jade); font-weight:700;}
+.sel.warn{background:var(--amber-l);color:var(--amber);border-color:var(--amber);font-weight:700;}
+.sel.bad {background:var(--coral-l);color:var(--coral);border-color:var(--coral);font-weight:700;}
+.inp{
+  width:100%;padding:5px 8px;border:1.5px solid var(--wire);border-radius:6px;
+  font-family:inherit;font-size:12px;color:var(--blue);background:#F0F6FF;
+  text-align:center;
+}
+.inp:focus{outline:none;border-color:var(--bh-primary);}
+.inp.gold{color:var(--bh-gold);font-weight:700;background:var(--bh-gold-l);}
+textarea.inp{text-align:right;resize:vertical;min-height:50px;}
+
+/* ── PROGRESS BAR ────────────────────────────────────────────────────── */
+.prog-wrap{height:6px;background:var(--wire);border-radius:3px;overflow:hidden;margin-top:4px;}
+.prog-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+
+/* ── SIGS ────────────────────────────────────────────────────────────── */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+.sig{text-align:center;padding:16px;border:2px dashed var(--wire);border-radius:10px;}
+.sig h4{font-weight:700;margin-bottom:22px;font-size:13px;color:var(--bh-primary);}
+.sig .line{border-top:1px solid var(--wire);padding-top:8px;font-size:11px;color:var(--mist);}
+
+/* ── DISCLAIMER ──────────────────────────────────────────────────────── */
+.disclaimer{
+  background:linear-gradient(135deg,var(--bh-primary),#0D2240);
+  color:#fff;border-radius:10px;padding:16px 20px;
+  font-size:12px;display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;
+}
+.disclaimer .icon{font-size:20px;flex-shrink:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.card{animation:fadeUp .4s ease both;}
+.score-hero{animation:fadeUp .3s ease both;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="bh-logo">Business Heaven</div>
+    <div class="topbar-title">
+      <h1>تقرير المراجعة الخارجية — البنوك والخزنة والعهد</h1>
+      <p>تقييم أداء الفريق المالي: محمد حسن · محمد زيدان · الجديلي</p>
+    </div>
+  </div>
+  <div class="topbar-meta">
+    <div class="meta-pill">📅 تقرير يوم: <span id="report-day">—</span></div>
+    <div class="meta-pill">المراجع الخارجي: <span>Business Heaven</span></div>
+    <div class="meta-pill">النقاط: <span id="total-score-pill">—/100</span></div>
+    <button class="btn btn-gold" onclick="saveDaily()">💾 حفظ نسخة اليوم</button>
+    <button class="btn btn-green" onclick="nextDay()">⏭ يوم جديد</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <div class="icon">🏢</div>
+    <div>
+      <strong>Business Heaven — مراجع خارجي مستقل</strong><br>
+      هذا التقرير يُعدّه فريق Business Heaven بشكل يومي بناءً على مراجعة عمليات تسجيل البنوك والخزنة والعهد.
+      النتائج والتقييمات مستقلة تماماً وتُرفع مباشرة لمجلس الإدارة.
+    </div>
+  </div>
+
+  <!-- SCORE HERO -->
+  <div class="score-hero">
+    <div class="score-donut" id="hero-donut" style="--dc:#ccc;--dp:0">
+      <div class="score-donut-val">
+        <span class="big" id="hero-score">—</span>
+        <span class="sm">من 100</span>
+      </div>
+    </div>
+    <div class="score-info">
+      <h2>تقييم أداء الفريق المالي</h2>
+      <p class="subject">تسجيل البنوك · الربط المحاسبي · الخزنة والعهد</p>
+      <div class="grade-badge" id="hero-grade" style="background:var(--wire);color:var(--mist)">— لم يتم الإدخال بعد —</div>
+      <div class="axes-mini" id="axes-mini"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: معلومات المراجعة -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">📋</div>
+      <div><h2>بيانات المراجعة اليومية</h2><p>يملأها مراجع Business Heaven</p></div>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:4px">تاريخ التقرير المُراجَع</label>
+          <input class="inp" id="meta-date" placeholder="27/06/2026" readonly style="color:var(--bh-primary);font-weight:700;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:4px">اسم مراجع Business Heaven</label>
+          <input class="inp" id="meta-reviewer" placeholder="اكتب الاسم">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:4px">وقت استلام تقرير منه</label>
+          <input class="inp" id="meta-receive-time" placeholder="00:00">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:4px">وقت إنهاء المراجعة</label>
+          <input class="inp" id="meta-end-time" placeholder="00:00">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: تقييم المحاور -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">⭐</div>
+      <div><h2>تقييم المحاور الستة — من 100 نقطة</h2>
+           <p>كل محور له وزن — يملأه مراجع Business Heaven بناءً على مراجعة تقرير منه</p></div>
+    </div>
+    <div class="card-body">
+      <div style="overflow-x:auto;">
+      <table class="axis-table">
+        <thead><tr>
+          <th>المحور</th>
+          <th>الوزن</th>
+          <th>معيار التقييم</th>
+          <th>التقييم</th>
+          <th>النقاط المحققة</th>
+          <th>ملاحظات BH</th>
+        </tr></thead>
+        <tbody id="axes-tbody"></tbody>
+        <tfoot><tr class="tfoot-row">
+          <td colspan="3">المجموع الكلي</td>
+          <td class="tcenter">—</td>
+          <td class="tnum" id="total-pts">0</td>
+          <td>—</td>
+        </tr></tfoot>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: مراجعة تقرير منه تفصيلية -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">🔍</div>
+      <div><h2>مراجعة تفصيلية لتقرير منه الله البرعي</h2>
+           <p>بيزنس هيفن يراجع كل بند من تقرير منه ويضع ملاحظاته</p></div>
+    </div>
+    <div class="card-body">
+      <div style="overflow-x:auto;">
+      <table class="axis-table">
+        <thead><tr>
+          <th>البند</th>
+          <th>ما قدّمه الفريق</th>
+          <th>تقييم BH</th>
+          <th>ملاحظة BH</th>
+          <th>إجراء مطلوب</th>
+        </tr></thead>
+        <tbody id="detail-tbody"></tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: الملاحظات الجوهرية -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">🚨</div>
+      <div><h2>الملاحظات الجوهرية والمخاطر</h2><p>تُرفع مباشرة لمجلس الإدارة</p></div>
+    </div>
+    <div class="card-body" id="obs-body">
+      <div style="display:flex;flex-direction:column;gap:12px;" id="obs-list"></div>
+      <button onclick="addObs()" style="
+        margin-top:12px;background:var(--paper);border:2px dashed var(--wire);
+        border-radius:8px;padding:10px;width:100%;font-family:inherit;
+        font-size:13px;color:var(--mist);cursor:pointer;font-weight:600;
+      ">+ إضافة ملاحظة</button>
+    </div>
+  </div>
+
+  <!-- SECTION 5: التوصيات النهائية -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon">📌</div>
+      <div><h2>التوصيات النهائية لمجلس الإدارة</h2></div>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:6px">نقاط القوة في أداء الفريق</label>
+          <textarea class="inp" id="rec-strengths" placeholder="نقاط القوة في أداء محمد حسن · زيدان · الجديلي..."></textarea>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:6px">نقاط تحتاج تحسين</label>
+          <textarea class="inp" id="rec-improve" placeholder="ما يحتاج تحسين في الفريق..."></textarea>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:6px">إجراءات مطلوبة من منه الله</label>
+          <textarea class="inp" id="rec-actions" placeholder="اكتب الإجراءات المطلوبة..."></textarea>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:6px">توصية Business Heaven لمجلس الإدارة</label>
+          <textarea class="inp" id="rec-board" placeholder="توصية BH لمجلس الإدارة بخصوص الفريق..."></textarea>
+        </div>
+      </div>
+      <!-- Overall recommendation -->
+      <div style="margin-top:16px;padding:16px;border-radius:10px;background:var(--paper);border:1px solid var(--wire);">
+        <label style="font-size:11px;font-weight:700;color:var(--mist);display:block;margin-bottom:8px">التوصية الإجمالية</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;" id="overall-rec-btns">
+          <button onclick="setRec('continue','الاستمرار مع الفريق الحالي','var(--jade)','var(--jade-l)')" class="rec-btn" style="flex:1;padding:12px;border-radius:8px;border:2px solid var(--wire);background:var(--snow);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">✅ الاستمرار مع منه الله</button>
+          <button onclick="setRec('monitor','متابعة مكثفة للفريق','var(--amber)','var(--amber-l)')" class="rec-btn" style="flex:1;padding:12px;border-radius:8px;border:2px solid var(--wire);background:var(--snow);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">⚠️ متابعة مكثفة مطلوبة</button>
+          <button onclick="setRec('review','إعادة توزيع المهام','var(--coral)','var(--coral-l)')" class="rec-btn" style="flex:1;padding:12px;border-radius:8px;border:2px solid var(--wire);background:var(--snow);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">🔄 مراجعة الدور والمسؤوليات</button>
+        </div>
+        <div id="overall-rec-result" style="margin-top:10px;display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">✍️</div><div><h2>التوقيعات والاعتمادات</h2></div></div>
+    <div class="card-body">
+      <div class="sig-grid">
+        <div class="sig"><h4>مراجع Business Heaven</h4><div class="line">التوقيع</div></div>
+        <div class="sig"><h4>مدير Business Heaven</h4><div class="line">التوقيع</div></div>
+        <div class="sig"><h4>مدير المالية — Energy</h4><div class="line">التوقيع</div></div>
+        <div class="sig"><h4>مدير عام — Energy</h4><div class="line">التوقيع</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+//  EVALUATION AXES — 6 axes, total 100 pts
+// ══════════════════════════════════════════════════════════════════════════
+const AXES = [
+  {
+    id:'timing', label:'الالتزام بالتوقيت', weight:20, icon:'⏱',
+    criterion:'هل تقرير منه اتقدم في الموعد المحدد؟',
+    opts:['✓ في الوقت','⚠ متأخر أقل من ساعة','✕ متأخر أكثر من ساعة','✕ لم يُقدَّم'],
+    scores:[20,14,7,0],
+  },
+  {
+    id:'completeness', label:'اكتمال البيانات', weight:20, icon:'📊',
+    criterion:'هل كل الخانات في تقرير منه مكتملة ومُدخَلة؟',
+    opts:['✓ مكتملة 100%','⚠ مكتملة 80-99%','⚠ مكتملة 60-79%','✕ أقل من 60%'],
+    scores:[20,15,8,0],
+  },
+  {
+    id:'quality', label:'جودة المراجعة', weight:25, icon:'🔍',
+    criterion:'هل التقييمات منطقية ومدعومة بمستندات؟',
+    opts:['✓ جودة ممتازة','⚠ جودة جيدة — ملاحظات بسيطة','⚠ جودة مقبولة — يحتاج تحسين','✕ جودة ضعيفة'],
+    scores:[25,18,10,0],
+  },
+  {
+    id:'source_match', label:'مطابقة المصدر', weight:15, icon:'🔗',
+    criterion:'هل عدد الأوردرات المسجلة يطابق عدد المصدر؟',
+    opts:['✓ مطابقة تامة','⚠ فرق 1-5 أوردر','⚠ فرق 6-10 أوردرات','✕ فرق أكثر من 10'],
+    scores:[15,10,5,0],
+  },
+  {
+    id:'invoices', label:'إقفال الفواتير', weight:10, icon:'🧾',
+    criterion:'هل منه أقفلت كل الفواتير قبل نهاية اليوم؟',
+    opts:['✓ كل الفواتير مغلقة','⚠ 80-99% مغلقة','⚠ 60-79% مغلقة','✕ أقل من 60%'],
+    scores:[10,7,4,0],
+  },
+  {
+    id:'reconciliation', label:'إنجاز التسويات', weight:10, icon:'⚖️',
+    criterion:'هل منه أنجزت كل التسويات المطلوبة؟',
+    opts:['✓ كل التسويات مكتملة','⚠ 80-99% مكتملة','⚠ 60-79% مكتملة','✕ أقل من 60%'],
+    scores:[10,7,4,0],
+  },
+];
+
+// Detail check items
+const DETAILS = [
+  {label:'كشوف البنوك (محمد حسن)',    q:'هل رفع محمد حسن كشوف الحسابات البنكية الـ27 وسجّلها كلها؟'},
+  {label:'دقة التحويلات (محمد حسن)',  q:'هل طابق محمد حسن مبالغ التحويلات مع البادجتات المعتمدة؟'},
+  {label:'وقت التسجيل (محمد حسن)',    q:'هل أدخل محمد حسن أوقات التسجيل لكل معاملة؟'},
+  {label:'الربط المحاسبي (محمد زيدان)',q:'هل ربط محمد زيدان كل المعاملات على الحسابات الصحيحة؟'},
+  {label:'مراكز التكلفة (محمد زيدان)',q:'هل ربط محمد زيدان كل المعاملات بمراكز التكلفة الصحيحة؟'},
+  {label:'وقت الربط (محمد زيدان)',    q:'هل أدخل محمد زيدان أوقات اكتمال الربط لكل معاملة؟'},
+  {label:'الخزنة الرئيسية (الجديلي)', q:'هل سجّل الجديلي كل بنود الخزنة الرئيسية بعملاتها الثلاثة؟'},
+  {label:'العهد النقدية (الجديلي)',    q:'هل سجّل الجديلي كل العهد النقدية للشركة الأساسية والفروع؟'},
+  {label:'الشركات الفرعية (الجديلي)', q:'هل شملت مراجعة الجديلي ملاحة انرجى وNew Alex وHome Felix وكلارك؟'},
+  {label:'اكتمال المرفقات (الكل)',     q:'هل كل المستندات والكشوف مرفقة ومربوطة بالمعاملات؟'},
+];
+
+const STATE = {
+  axes:    {}, // axis_id -> {sel_val, sel_idx, note}
+  details: {}, // idx -> {status, note, action}
+  obs:     [], // [{level, text, action}]
+};
+
+// ── Helpers ────────────────────────────────────────────────────────────
+function badge(v) {
+  if(!v) return '<span class="badge na">—</span>';
+  if(v.startsWith('✓')) return `<span class="badge ok">${v}</span>`;
+  if(v.startsWith('⚠')) return `<span class="badge warn">${v}</span>`;
+  if(v.startsWith('✕')) return `<span class="badge bad">${v}</span>`;
+  return `<span class="badge na">${v}</span>`;
+}
+function selCls(v) {
+  if(!v) return '';
+  if(v.startsWith('✓')) return 'ok';
+  if(v.startsWith('⚠')) return 'warn';
+  if(v.startsWith('✕')) return 'bad';
+  return '';
+}
+function mkSel(opts, val, cb) {
+  const s = document.createElement('select');
+  s.className = 'sel ' + selCls(val);
+  ['',...opts].forEach(o => {
+    const op = document.createElement('option');
+    op.value = o; op.textContent = o || '— اختر —';
+    if(o === val) op.selected = true;
+    s.appendChild(op);
+  });
+  s.onchange = function() {
+    this.className = 'sel ' + selCls(this.value);
+    cb(this.value); recalc();
+  };
+  return s;
+}
+
+// ── Build axes table ───────────────────────────────────────────────────
+function buildAxes() {
+  const tb = document.getElementById('axes-tbody');
+  tb.innerHTML = '';
+  AXES.forEach(ax => {
+    if(!STATE.axes[ax.id]) STATE.axes[ax.id] = {val:'', note:''};
+    const s = STATE.axes[ax.id];
+    const tr = document.createElement('tr');
+
+    // Name + weight
+    const nameTd = document.createElement('td');
+    nameTd.className = 'tname';
+    nameTd.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:18px">${ax.icon}</span>
+        <div>
+          <div>${ax.label}</div>
+          <div style="font-size:10px;color:var(--mist);font-weight:400">${ax.criterion}</div>
+        </div>
+      </div>`;
+    tr.appendChild(nameTd);
+
+    // Weight
+    const wtTd = document.createElement('td');
+    wtTd.className = 'tcenter';
+    wtTd.innerHTML = `<span class="badge ok">${ax.weight} نقطة</span>`;
+    tr.appendChild(wtTd);
+
+    // Scale
+    const scaleTd = document.createElement('td');
+    scaleTd.className = 'tcenter';
+    scaleTd.style.fontSize = '11px'; scaleTd.style.color = 'var(--mist)';
+    scaleTd.innerHTML = ax.opts.map((o,i) => `${o}: <strong>${ax.scores[i]}</strong>`).join('<br>');
+    tr.appendChild(scaleTd);
+
+    // Select
+    const selTd = document.createElement('td');
+    selTd.appendChild(mkSel(ax.opts, s.val, v => { s.val = v; }));
+    tr.appendChild(selTd);
+
+    // Score
+    const scoreTd = document.createElement('td');
+    scoreTd.className = 'tnum'; scoreTd.id = `ax-score-${ax.id}`;
+    scoreTd.textContent = '—';
+    tr.appendChild(scoreTd);
+
+    // Note
+    const noteTd = document.createElement('td');
+    const noteInp = document.createElement('input');
+    noteInp.className = 'inp'; noteInp.placeholder = 'ملاحظة...';
+    noteInp.value = s.note || '';
+    noteInp.oninput = function() { s.note = this.value; };
+    noteTd.appendChild(noteInp);
+    tr.appendChild(noteTd);
+
+    tb.appendChild(tr);
+  });
+}
+
+// ── Build detail table ─────────────────────────────────────────────────
+const DETAIL_OPTS = ['✓ نعم — مكتمل','⚠ جزئي — يحتاج تحسين','✕ لا — غير مكتمل'];
+function buildDetails() {
+  const tb = document.getElementById('detail-tbody');
+  tb.innerHTML = '';
+  DETAILS.forEach((d, i) => {
+    if(!STATE.details[i]) STATE.details[i] = {status:'', note:'', action:''};
+    const s = STATE.details[i];
+    const tr = document.createElement('tr');
+
+    const nameTd = document.createElement('td'); nameTd.className='tname';
+    nameTd.innerHTML = `<div>${d.label}</div><div style="font-size:10px;color:var(--mist)">${d.q}</div>`;
+    tr.appendChild(nameTd);
+
+    // What منه submitted (read-only display)
+    const submTd = document.createElement('td');
+    submTd.className = 'tcenter';
+    submTd.innerHTML = '<span class="badge na">من تقرير الفريق</span>';
+    tr.appendChild(submTd);
+
+    // BH eval
+    const evalTd = document.createElement('td');
+    evalTd.appendChild(mkSel(DETAIL_OPTS, s.status, v => { s.status = v; recalc(); }));
+    tr.appendChild(evalTd);
+
+    // BH note
+    const noteTd = document.createElement('td');
+    const noteInp = document.createElement('input');
+    noteInp.className='inp'; noteInp.placeholder='ملاحظة BH...';
+    noteInp.value = s.note||'';
+    noteInp.oninput = function(){s.note=this.value;};
+    noteTd.appendChild(noteInp);
+    tr.appendChild(noteTd);
+
+    // Action
+    const actTd = document.createElement('td');
+    const actInp = document.createElement('input');
+    actInp.className='inp'; actInp.placeholder='إجراء مطلوب...';
+    actInp.value = s.action||'';
+    actInp.oninput = function(){s.action=this.value;};
+    actTd.appendChild(actInp);
+    tr.appendChild(actTd);
+
+    tb.appendChild(tr);
+  });
+}
+
+// ── Observations ───────────────────────────────────────────────────────
+function addObs(level='medium', text='', action='') {
+  const idx = STATE.obs.length;
+  STATE.obs.push({level, text, action});
+  renderObs();
+}
+function renderObs() {
+  const list = document.getElementById('obs-list');
+  list.innerHTML = '';
+  STATE.obs.forEach((ob, i) => {
+    const colors = {
+      high:   {bg:'var(--coral-l)', border:'var(--coral)', icon:'🔴'},
+      medium: {bg:'var(--amber-l)', border:'var(--amber)', icon:'🟡'},
+      low:    {bg:'var(--jade-l)',  border:'var(--jade)',  icon:'🟢'},
+    };
+    const c = colors[ob.level] || colors.medium;
+    const div = document.createElement('div');
+    div.style.cssText = `background:${c.bg};border-right:4px solid ${c.border};border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;`;
+    div.innerHTML = `
+      <span style="font-size:18px;flex-shrink:0">${c.icon}</span>
+      <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="sel" style="width:140px" onchange="STATE.obs[${i}].level=this.value;renderObs()">
+            <option value="high"  ${ob.level==='high'  ?'selected':''}>خطر عالٍ 🔴</option>
+            <option value="medium"${ob.level==='medium'?'selected':''}>تنبيه 🟡</option>
+            <option value="low"   ${ob.level==='low'   ?'selected':''}>ملاحظة 🟢</option>
+          </select>
+          <input class="inp" placeholder="الملاحظة..." value="${ob.text}"
+            oninput="STATE.obs[${i}].text=this.value" style="flex:1">
+        </div>
+        <input class="inp" placeholder="الإجراء المطلوب من منه الله..."
+          value="${ob.action}" oninput="STATE.obs[${i}].action=this.value">
+      </div>
+      <button onclick="STATE.obs.splice(${i},1);renderObs()" style="background:none;border:none;cursor:pointer;color:var(--mist);font-size:16px;flex-shrink:0;">✕</button>`;
+    list.appendChild(div);
+  });
+}
+
+// ── RECALC ─────────────────────────────────────────────────────────────
+function recalc() {
+  let total = 0;
+  AXES.forEach(ax => {
+    const s = STATE.axes[ax.id];
+    const idx = ax.opts.indexOf(s.val);
+    const pts = idx >= 0 ? ax.scores[idx] : 0;
+    total += pts;
+    const el = document.getElementById(`ax-score-${ax.id}`);
+    if(el) {
+      el.textContent = s.val ? pts : '—';
+      el.style.color = pts >= ax.weight*0.8 ? 'var(--jade)' : pts >= ax.weight*0.5 ? 'var(--amber)' : 'var(--coral)';
+    }
+  });
+
+  // Total pts
+  const filledAxes = AXES.filter(ax => STATE.axes[ax.id]?.val);
+  const hasFilled = filledAxes.length > 0;
+  document.getElementById('total-pts').textContent = hasFilled ? total : '—';
+  document.getElementById('total-score-pill').textContent = hasFilled ? `${total}/100` : '—/100';
+
+  // Hero donut
+  if(hasFilled) {
+    const pct = total;
+    const color = pct >= 80 ? '#0F7B5B' : pct >= 60 ? '#926B00' : '#C0392B';
+    const donut = document.getElementById('hero-donut');
+    donut.style.setProperty('--dc', color);
+    donut.style.setProperty('--dp', pct);
+    document.getElementById('hero-score').textContent = total;
+    document.getElementById('hero-score').style.color = color;
+
+    // Grade
+    let grade, gbg, gcol;
+    if(pct>=90){grade='ممتاز';gbg='var(--jade-l)';gcol='var(--jade)';}
+    else if(pct>=80){grade='جيد جداً';gbg='#C8F7C5';gcol='var(--jade)';}
+    else if(pct>=70){grade='جيد';gbg='var(--amber-l)';gcol='var(--amber)';}
+    else if(pct>=60){grade='مقبول';gbg='#FFE0B2';gcol='#BF360C';}
+    else{grade='يحتاج تحسين';gbg='var(--coral-l)';gcol='var(--coral)';}
+
+    const gb = document.getElementById('hero-grade');
+    gb.textContent = grade;
+    gb.style.background = gbg; gb.style.color = gcol;
+  }
+
+  // Mini axes
+  const mini = document.getElementById('axes-mini');
+  mini.innerHTML = '';
+  AXES.forEach(ax => {
+    const s = STATE.axes[ax.id];
+    const idx = ax.opts.indexOf(s.val);
+    const pts = idx >= 0 ? ax.scores[idx] : 0;
+    const pct = ax.weight > 0 ? (pts / ax.weight) * 100 : 0;
+    const c = pct >= 80 ? '#4ADE80' : pct >= 50 ? '#FCD34D' : '#F87171';
+    mini.innerHTML += `
+      <div class="axis-mini-row">
+        <span class="axis-mini-lbl">${ax.icon} ${ax.label}</span>
+        <div class="axis-mini-track">
+          <div class="axis-mini-fill" style="width:${s.val?pct:0}%;background:${c}"></div>
+        </div>
+        <span class="axis-mini-score" style="color:${c}">${s.val?pts:'—'}</span>
+      </div>`;
+  });
+}
+
+// ── Overall recommendation ─────────────────────────────────────────────
+let currentRec = null;
+function setRec(id, label, color, bg) {
+  currentRec = id;
+  document.querySelectorAll('.rec-btn').forEach(b => {
+    b.style.background = 'var(--snow)'; b.style.borderColor = 'var(--wire)';
+    b.style.color = 'var(--ink)';
+  });
+  event.target.style.background = bg.replace('var(','').replace(')','');
+  event.target.style.background = `${bg}`;
+  event.target.style.borderColor = color.replace('var(','').replace(')','');
+  const res = document.getElementById('overall-rec-result');
+  res.style.display = 'block';
+  res.innerHTML = `<div style="padding:10px 14px;border-radius:8px;background:${bg};color:${color};font-weight:700;font-size:13px;">
+    📌 توصية Business Heaven: ${label}</div>`;
+}
+
+// ── Date management ────────────────────────────────────────────────────
+const START = new Date(2026,5,27);
+function loadDate() {
+  const s = localStorage.getItem('bh_bank_date');
+  return s ? new Date(s) : new Date(START);
+}
+function saveDate(d) { localStorage.setItem('bh_bank_date', d.toISOString()); }
+function fmtDisplay(d) {
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+function fmtArabic(d) {
+  return d.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+let REPORT_DATE = loadDate();
+
+function updateDateDisplay() {
+  document.getElementById('report-day').textContent = fmtDisplay(REPORT_DATE);
+  if(document.getElementById('meta-date'))
+    document.getElementById('meta-date').value = fmtDisplay(REPORT_DATE);
+}
+
+// ── Save daily ─────────────────────────────────────────────────────────
+function saveDaily() {
+  const d=REPORT_DATE;
+  const dd=String(d.getDate()).padStart(2,'0');
+  const mm=String(d.getMonth()+1).padStart(2,'0');
+  const yyyy=d.getFullYear();
+  const fname=`BH_بنوك_${yyyy}-${mm}-${dd}.html`;
+  const content=document.documentElement.outerHTML.replace(/<title>.*?<\/title>/,`<title>BH بنوك — ${dd}/${mm}/${yyyy}</title>`);
+  const blob=new Blob([content],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();URL.revokeObjectURL(a.href);
+  pushToGitHub(content,d);
+}
+
+async function pushToGitHub(htmlContent, d) {
+  const owner  = 'A2Z-2025';
+  const repo   = 'Energy-reporting';
+  const path   = 'bh-banks/index.html';
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const dd     = String(d.getDate()).padStart(2,'0');
+  const mm     = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy   = d.getFullYear();
+
+  let token = localStorage.getItem('gh_token');
+  if(!token) {
+    token = prompt('🔑 أدخلي GitHub Token (مرة واحدة فقط):');
+    if(!token) return;
+    localStorage.setItem('gh_token', token);
+  }
+
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A3A63;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
+  t.textContent = '⏳ جارٍ الرفع على GitHub...';
+  document.body.appendChild(t);
+
+  try {
+    const getRes  = await fetch(apiUrl, {headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json'}});
+    const getData = await getRes.json();
+    const sha     = getData.sha || null;
+    const encoded = btoa(unescape(encodeURIComponent(htmlContent)));
+    const putRes  = await fetch(apiUrl, {
+      method:'PUT',
+      headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body: JSON.stringify({message:`تقرير BH بنوك ${dd}/${mm}/${yyyy}`,content:encoded,...(sha?{sha}:{})})
+    });
+    t.remove();
+    if(putRes.ok) {
+      const s = document.createElement('div');
+      s.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A6B3C;color:#fff;padding:14px 28px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;text-align:center';
+      s.innerHTML = `✅ تم الرفع!<br><a href="https://a2z-2025.github.io/Energy-reporting/bh-banks/" target="_blank" style="color:#A3D977;font-size:12px">a2z-2025.github.io/Energy-reporting/bh-banks/</a>`;
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),7000);
+    } else {
+      const err = await putRes.json();
+      if(err.message?.includes('Bad credentials')) { localStorage.removeItem('gh_token'); }
+      throw new Error(err.message||'فشل');
+    }
+  } catch(e) {
+    t.remove();
+    const er = document.createElement('div');
+    er.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#8B1A1A;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
+    er.textContent = `⚠️ ${e.message||'فشل الرفع'} — تم الحفظ محلياً`;
+    document.body.appendChild(er);
+    setTimeout(()=>er.remove(),5000);
+  }
+}
+
+function nextDay() {
+  const next=new Date(REPORT_DATE); next.setDate(next.getDate()+1);
+  const overlay=document.createElement('div');
+  overlay.style.cssText=`position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;`;
+  overlay.innerHTML=`
+    <div style="background:#fff;border-radius:16px;padding:32px;max-width:440px;width:90%;direction:rtl;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+      <div style="font-size:36px;margin-bottom:12px">⏭</div>
+      <h2 style="font-size:17px;font-weight:800;color:var(--bh-primary);margin-bottom:8px">الانتقال ليوم جديد</h2>
+      <p style="font-size:22px;font-weight:800;color:#1A6B3C;margin-bottom:16px">${fmtDisplay(next)}</p>
+      <div style="background:#FFF8E1;border-radius:8px;padding:10px;margin-bottom:20px;font-size:12px;color:#7D4E00;">
+        ⚠️ تأكد من حفظ نسخة اليوم الحالي أولاً
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button onclick="confirmNext('${next.toISOString()}',this)" style="background:var(--bh-primary);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">انتقل إلى ${fmtDisplay(next)}</button>
+        <button onclick="this.closest('div').parentElement.parentElement.remove()" style="background:var(--wire);color:var(--slate);border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">إلغاء</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+}
+
+function confirmNext(iso, btn) {
+  REPORT_DATE = new Date(iso);
+  saveDate(REPORT_DATE);
+  // Reset state
+  AXES.forEach(ax => { STATE.axes[ax.id] = {val:'', note:''}; });
+  DETAILS.forEach((_,i) => { STATE.details[i] = {status:'', note:'', action:''}; });
+  STATE.obs = [];
+  buildAxes(); buildDetails(); renderObs(); recalc(); updateDateDisplay();
+  btn.closest('div').parentElement.parentElement.remove();
+  const toast=document.createElement('div');
+  toast.style.cssText=`position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A6B3C;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;`;
+  toast.textContent=`✅ تم الانتقال إلى ${fmtDisplay(REPORT_DATE)}`;
+  document.body.appendChild(toast); setTimeout(()=>toast.remove(),3000);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────
+buildAxes();
+buildDetails();
+renderObs();
+updateDateDisplay();
+recalc();
+</script>
+</body>
+</html>
