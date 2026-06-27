@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقرير اليومي — البنوك والخزنة والعهد</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans Arabic','Segoe UI',sans-serif;background:#F8F9FA;color:#1A1A2E;font-size:14px;direction:rtl;line-height:1.5;}
+
+/* ── TOKENS ── */
+:root{
+  --white:#FFFFFF;
+  --bg:#F8F9FA;
+  --surface:#FFFFFF;
+  --border:rgba(0,0,0,.08);
+  --border2:rgba(0,0,0,.14);
+  --text:#1A1A2E;
+  --muted:#64748B;
+  --hint:#94A3B8;
+
+  --blue:#378ADD;   --blue-l:#E6F1FB;  --blue-d:#0C447C;
+  --green:#1D9E75;  --green-l:#E1F5EE; --green-d:#085041;
+  --amber:#BA7517;  --amber-l:#FAEEDA; --amber-d:#412402;
+  --red:#E24B4A;    --red-l:#FCEBEB;   --red-d:#501313;
+  --purple:#534AB7; --purple-l:#EEEDFE;--purple-d:#26215C;
+
+  --mh:#378ADD; --mh-l:#E6F1FB; --mh-d:#0C447C;
+  --mz:#1D9E75; --mz-l:#E1F5EE; --mz-d:#085041;
+  --jd:#BA7517; --jd-l:#FAEEDA; --jd-d:#412402;
+
+  --egp-bg:#E6F1FB; --egp-c:#0C447C;
+  --usd-bg:#EAF3DE; --usd-c:#27500A;
+  --eur-bg:#FAEEDA; --eur-c:#412402;
+  --aed-bg:#FBEAF0; --aed-c:#4B1528;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--surface);
+  border-bottom:0.5px solid var(--border2);
+  border-right:4px solid var(--purple);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+  position:sticky;top:0;z-index:100;
+}
+.tb-left{display:flex;align-items:center;gap:10px;}
+.brand-pill{
+  background:var(--purple-l);
+  color:var(--purple-d);
+  font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;
+  white-space:nowrap;
+}
+.topbar h1{font-size:13px;font-weight:700;color:var(--text);}
+.topbar p{font-size:10px;color:var(--muted);margin-top:1px;}
+.tb-right{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.chip{
+  background:var(--bg);
+  border:0.5px solid var(--border2);
+  border-radius:20px;padding:4px 10px;
+  font-size:11px;color:var(--muted);
+}
+.chip strong{color:var(--text);font-weight:700;}
+.btn{
+  border:0.5px solid var(--border2);
+  border-radius:20px;padding:5px 14px;
+  font-family:inherit;font-size:11px;font-weight:600;
+  cursor:pointer;background:var(--surface);
+  color:var(--text);transition:background .12s;white-space:nowrap;
+}
+.btn:hover{background:var(--bg);}
+.btn-dark{background:var(--text);color:#fff;border-color:var(--text);}
+.btn-dark:hover{opacity:.88;background:var(--text);}
+
+/* ── TABS ── */
+.nav{
+  background:var(--surface);
+  border-bottom:0.5px solid var(--border);
+  padding:0 20px;display:flex;gap:0;overflow-x:auto;
+}
+.tab{
+  padding:10px 16px;font-size:12px;font-weight:600;
+  color:var(--hint);border-bottom:2px solid transparent;
+  cursor:pointer;white-space:nowrap;transition:all .15s;
+  background:none;border-top:none;border-left:none;border-right:none;
+  font-family:inherit;
+}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--purple);border-bottom-color:var(--purple);}
+
+/* ── CONTENT ── */
+.content{max-width:1500px;margin:0 auto;padding:18px 16px 80px;}
+.panel{display:none;}.panel.active{display:block;}
+
+/* ── DATE CARD ── */
+.date-card{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:12px;
+  border-right:4px solid var(--purple);
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:14px;
+  margin-bottom:12px;
+}
+.dc-left .dl{font-size:10px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px;}
+.dc-left .dv{font-size:18px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);}
+.dc-left .ds{font-size:10px;color:var(--hint);margin-top:2px;}
+.dc-right{display:flex;gap:16px;}
+.dc-stat{text-align:center;}
+.dc-stat .sv{font-size:16px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+.dc-stat .sl{font-size:9px;color:var(--hint);margin-top:1px;text-transform:uppercase;letter-spacing:.3px;}
+
+/* ── KPI ROW ── */
+.kpi-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.kpi{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+}
+.kpi-accent{width:20px;height:3px;border-radius:2px;margin-bottom:8px;}
+.kpi .v{font-size:20px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);}
+.kpi .l{font-size:9px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.3px;}
+
+/* ── PROGRESS STRIP ── */
+.prog-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.prog-card{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+}
+.pc-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.pc-av{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.pc-name{font-size:12px;font-weight:700;color:var(--text);}
+.pc-role{font-size:10px;color:var(--muted);}
+.pc-bar{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:6px;}
+.pc-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+.pc-foot{display:flex;justify-content:space-between;font-size:10px;}
+.pc-foot span{color:var(--hint);}
+.pc-foot strong{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--text);}
+
+/* ── EVAL GRID ── */
+.eval-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.ecard{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:10px;overflow:hidden;
+}
+.ecard-bar{height:4px;}
+.ehead{
+  padding:10px 14px;display:flex;align-items:center;gap:10px;
+  border-bottom:0.5px solid var(--border);background:var(--bg);
+}
+.avatar{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.ehead h3{font-size:12px;font-weight:700;color:var(--text);}
+.ehead p{font-size:10px;color:var(--muted);}
+.ebody{padding:10px 14px;}
+
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.ring-wrap{position:relative;width:52px;height:52px;flex-shrink:0;}
+.ring-wrap svg{width:52px;height:52px;transform:rotate(-90deg);}
+.rbg{fill:none;stroke:var(--bg);stroke-width:5;}
+.rfill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .8s ease;}
+.rval{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);}
+.score-big{font-size:20px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);}
+.grade-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-top:3px;}
+
+.axes{display:flex;flex-direction:column;gap:5px;}
+.ax-row{display:grid;grid-template-columns:68px 1fr 30px;gap:6px;align-items:center;}
+.ax-lbl{font-size:10px;color:var(--muted);}
+.ax-track{height:4px;background:var(--bg);border-radius:2px;overflow:hidden;}
+.ax-fill{height:100%;border-radius:2px;transition:width .8s ease;}
+.ax-score{font-size:10px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);text-align:left;}
+
+.estate{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:8px;}
+.estat{text-align:center;padding:5px 3px;border-radius:6px;background:var(--bg);}
+.estat .ev{font-size:15px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+.estat .el{font-size:9px;color:var(--hint);margin-top:1px;}
+.efooter{margin-top:8px;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:700;text-align:center;}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;}
+.ch{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border);background:var(--bg);}
+.ci{width:28px;height:28px;border-radius:7px;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.ch h2{font-size:12px;font-weight:700;color:var(--text);}
+.ch p{font-size:10px;color:var(--muted);}
+.cb{padding:14px 16px;}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+thead tr{background:var(--text);}
+thead th{padding:7px 8px;color:#fff;font-weight:700;font-size:10px;text-align:center;white-space:nowrap;}
+thead th.tl{text-align:right;}
+tbody tr{border-bottom:0.5px solid var(--border);transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover td{background:var(--purple-l)!important;}
+tbody tr.egp td{background:var(--egp-bg);}
+tbody tr.usd td{background:var(--usd-bg);}
+tbody tr.eur td{background:var(--eur-bg);}
+tbody tr.aed td{background:var(--aed-bg);}
+tbody tr.grp td{background:var(--bg);font-weight:700;font-size:10.5px;color:var(--muted);padding:5px 8px;}
+tbody td{padding:7px 8px;text-align:center;vertical-align:middle;color:var(--text);}
+tbody td.tl{text-align:right;font-weight:700;}
+tbody td.mono{font-family:'IBM Plex Mono',monospace;font-size:10px;}
+.tfoot-r td{background:var(--text)!important;color:#fff!important;font-weight:700;font-size:11px;padding:7px 8px;text-align:center;}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;}
+.badge.ok  {background:var(--green-l);color:var(--green-d);}
+.badge.warn{background:var(--amber-l);color:var(--amber-d);}
+.badge.bad {background:var(--red-l);  color:var(--red-d);}
+.badge.na  {background:var(--bg);color:var(--hint);border:0.5px solid var(--border2);}
+
+/* ── CUR PILL ── */
+.cur{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+.cur.egp{background:var(--egp-bg);color:var(--egp-c);}
+.cur.usd{background:var(--usd-bg);color:var(--usd-c);}
+.cur.eur{background:var(--eur-bg);color:var(--eur-c);}
+.cur.aed{background:var(--aed-bg);color:var(--aed-c);}
+
+/* ── SELECT/INPUT ── */
+.sel{width:100%;padding:3px 6px;border:0.5px solid var(--border2);border-radius:20px;
+  font-family:inherit;font-size:10.5px;color:var(--blue);background:var(--bg);cursor:pointer;}
+.sel:focus{outline:none;border-color:var(--purple);}
+.sel.ok  {background:var(--green-l);color:var(--green-d);border-color:var(--green);font-weight:700;}
+.sel.warn{background:var(--amber-l);color:var(--amber-d);border-color:var(--amber);font-weight:700;}
+.sel.bad {background:var(--red-l);  color:var(--red-d);  border-color:var(--red);  font-weight:700;}
+.inp{width:100%;padding:3px 6px;border:0.5px solid var(--border2);border-radius:20px;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text);
+  background:var(--bg);text-align:center;}
+.inp:focus{outline:none;border-color:var(--purple);}
+
+/* ── LEGEND ── */
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:600;}
+.ld{width:8px;height:8px;border-radius:50%;}
+
+/* ── SIGS ── */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.sig{text-align:center;padding:14px;border:0.5px dashed var(--border2);border-radius:10px;}
+.sig h4{font-weight:700;font-size:11px;margin-bottom:20px;color:var(--text);}
+.sig .line{border-top:0.5px solid var(--border);padding-top:6px;font-size:10px;color:var(--hint);}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-left">
+    <span class="brand-pill">Energy</span>
+    <div>
+      <h1>التقرير اليومي — البنوك والخزنة والعهد</h1>
+      <p>27 حساب بنكي &nbsp;·&nbsp; 23 خزنة وعهدة &nbsp;·&nbsp; محمد حسن · محمد زيدان · الجديلي</p>
+    </div>
+  </div>
+  <div class="tb-right">
+    <div class="chip">تقرير يوم: <strong id="report-day">—</strong></div>
+    <div class="chip">امتثال: <strong id="global-pct">—%</strong></div>
+    <button class="btn" onclick="saveDaily()">💾 حفظ نسخة اليوم</button>
+    <button class="btn btn-dark" onclick="nextDay()">⏭ يوم جديد</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="nav">
+  <button class="tab active" onclick="show('eval',this)">⭐ التقييم</button>
+  <button class="tab" onclick="show('banks',this)">🏦 البنوك (27)</button>
+  <button class="tab" onclick="show('cash',this)">🔒 الخزنة والعهد (23)</button>
+</div>
+
+<div class="content">
+
+<!-- DATE CARD -->
+<div class="date-card">
+  <div class="dc-left">
+    <div class="dl">تاريخ التقرير</div>
+    <div class="dv" id="date-display">—</div>
+    <div class="ds">Energy for Import &amp; Export</div>
+  </div>
+  <div class="dc-right">
+    <div class="dc-stat"><div class="sv" id="ds-total" style="color:var(--blue)">—</div><div class="sl">المعاملات</div></div>
+    <div class="dc-stat"><div class="sv" id="ds-ok"    style="color:var(--green)">—</div><div class="sl">سليم</div></div>
+    <div class="dc-stat"><div class="sv" id="ds-warn"  style="color:var(--amber)">—</div><div class="sl">ملاحظات</div></div>
+    <div class="dc-stat"><div class="sv" id="ds-bad"   style="color:var(--red)">—</div><div class="sl">مخالفات</div></div>
+    <div class="dc-stat"><div class="sv" id="ds-time"  style="font-family:'IBM Plex Mono',monospace;color:var(--purple)">—</div><div class="sl">الوقت</div></div>
+  </div>
+</div>
+
+<!-- PROGRESS STRIP -->
+<div class="prog-strip">
+  <div class="prog-card">
+    <div class="pc-head">
+      <div class="pc-av" style="background:var(--blue-l);color:var(--blue-d)">مح</div>
+      <div><div class="pc-name">محمد حسن</div><div class="pc-role">تسجيل البنوك · 27 حساب</div></div>
+    </div>
+    <div class="pc-bar"><div class="pc-fill" id="pf-mh" style="width:0%;background:var(--blue)"></div></div>
+    <div class="pc-foot"><span>نسبة الدقة</span><strong id="pr-mh">—%</strong></div>
+  </div>
+  <div class="prog-card">
+    <div class="pc-head">
+      <div class="pc-av" style="background:var(--green-l);color:var(--green-d)">مز</div>
+      <div><div class="pc-name">محمد زيدان</div><div class="pc-role">الربط المحاسبي · الكل</div></div>
+    </div>
+    <div class="pc-bar"><div class="pc-fill" id="pf-mz" style="width:0%;background:var(--green)"></div></div>
+    <div class="pc-foot"><span>نسبة الدقة</span><strong id="pr-mz">—%</strong></div>
+  </div>
+  <div class="prog-card">
+    <div class="pc-head">
+      <div class="pc-av" style="background:var(--amber-l);color:var(--amber-d)">جد</div>
+      <div><div class="pc-name">الجديلي</div><div class="pc-role">الخزنة والعهد · 23 بند</div></div>
+    </div>
+    <div class="pc-bar"><div class="pc-fill" id="pf-jd" style="width:0%;background:var(--amber)"></div></div>
+    <div class="pc-foot"><span>نسبة الدقة</span><strong id="pr-jd">—%</strong></div>
+  </div>
+</div>
+
+<!-- ╔═ EVAL ══════════════════════════════════════════════════════════╗ -->
+<div id="panel-eval" class="panel active">
+  <div class="kpi-strip">
+    <div class="kpi info"><div class="v" id="g-total">—</div><div class="l">إجمالي المعاملات</div></div>
+    <div class="kpi ok">  <div class="v" id="g-ok">—</div>   <div class="l">✓ سليم</div></div>
+    <div class="kpi warn"><div class="v" id="g-warn">—</div>  <div class="l">! ملاحظات</div></div>
+    <div class="kpi bad"> <div class="v" id="g-bad">—</div>   <div class="l">✕ مخالفات</div></div>
+    <div class="kpi info"><div class="v" id="g-pct">—%</div>  <div class="l">نسبة الامتثال</div></div>
+  </div>
+  <div class="eval-grid" id="eval-grid"></div>
+  <!-- CHARTS DASHBOARD -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+
+  <!-- Bar chart: نسبة الامتثال للمحاسبين -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ch">
+      <div class="ci" style="background:var(--blue)">📊</div>
+      <div><h2>نسبة الامتثال</h2><p>لكل محاسب</p></div>
+    </div>
+    <div class="cb" style="padding:14px;">
+      <canvas id="barChart" height="180"></canvas>
+    </div>
+  </div>
+
+  <!-- Donut chart: حالة البنوك -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ch">
+      <div class="ci" style="background:var(--purple)">🔵</div>
+      <div><h2>حالة المعاملات</h2><p>سليم / ملاحظات / مخالفات</p></div>
+    </div>
+    <div class="cb" style="padding:14px;display:flex;align-items:center;justify-content:center;">
+      <canvas id="donutChart" height="180" width="180"></canvas>
+    </div>
+  </div>
+
+  <!-- Radar chart: مقارنة المحاسبين -->
+  <div class="card" style="margin-bottom:0">
+    <div class="ch">
+      <div class="ci" style="background:var(--green)">🕸</div>
+      <div><h2>مقارنة المحاسبين</h2><p>دقة · سرعة · امتثال</p></div>
+    </div>
+    <div class="cb" style="padding:14px;">
+      <canvas id="radarChart" height="180"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<div class="card">
+    <div class="ch"><div class="ci">✍️</div><div><h2>التوقيعات</h2></div></div>
+    <div class="cb">
+      <div class="sig-grid">
+        <div class="sig"><h4>محمد حسن — تسجيل البنوك</h4><div class="line">التوقيع</div></div>
+        <div class="sig"><h4>الجديلي — تسجيل الخزنة والعهد</h4><div class="line">التوقيع</div></div>
+        <div class="sig"><h4>محمد زيدان — الربط المحاسبي</h4><div class="line">التوقيع</div></div>
+        <div class="sig"><h4>مدير المالية</h4><div class="line">التوقيع</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔═ BANKS ══════════════════════════════════════════════════════════╗ -->
+<div id="panel-banks" class="panel">
+  <div class="kpi-strip" id="bank-kpis"></div>
+  <div class="card">
+    <div class="ch">
+      <div class="ci">🏦</div>
+      <div>
+        <h2>البنوك — 9 بنوك × 3 عملات = 27 حساب</h2>
+        <p>محمد حسن: تسجيل التحويلات | محمد زيدان: الربط المحاسبي</p>
+      </div>
+    </div>
+    <div class="cb">
+      <div class="legend">
+        <span class="li"><span class="ld" style="background:var(--egp);border:1px solid #AED6F1"></span>جنيه مصري EGP</span>
+        <span class="li"><span class="ld" style="background:var(--usd);border:1px solid #A9DFBF"></span>دولار USD</span>
+        <span class="li"><span class="ld" style="background:var(--eur);border:1px solid #F9E79F"></span>يورو EUR</span>
+        <span class="li"><span class="ld" style="background:var(--aed);border:1px solid #D7BDE2"></span>درهم AED</span>
+      </div>
+      <div class="tw"><table>
+        <thead><tr>
+          <th>م</th><th class="tl">البنك</th><th>العملة</th><th>كود</th>
+          <th>كشف البنك مرفق؟</th>
+          <th>الحساب صحيح؟ (حسن)</th>
+          <th>مركز التكلفة؟ (حسن)</th>
+          <th>البادجت معتمد؟</th>
+          <th>اعتماد المصروف؟</th>
+          <th>وقت التسجيل (حسن)</th>
+          <th>الربط صحيح؟ (زيدان)</th>
+          <th>وقت الربط (زيدان)</th>
+          <th>رصيد آخر اليوم</th>
+          <th>الحالة</th>
+        </tr></thead>
+        <tbody id="banks-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔═ CASH & CUSTODY ═════════════════════════════════════════════════╗ -->
+<div id="panel-cash" class="panel">
+  <div class="kpi-strip" id="cash-kpis"></div>
+  <div class="card">
+    <div class="ch">
+      <div class="ci">🔒</div>
+      <div>
+        <h2>الخزنة والعهد — Energy + الشركات الفرعية</h2>
+        <p>الجديلي: التصفية والتسجيل | محمد زيدان: الربط المحاسبي</p>
+      </div>
+    </div>
+    <div class="cb">
+      <div class="legend">
+        <span class="li"><span class="ld" style="background:var(--egp);border:1px solid #AED6F1"></span>EGP</span>
+        <span class="li"><span class="ld" style="background:var(--usd);border:1px solid #A9DFBF"></span>USD</span>
+        <span class="li"><span class="ld" style="background:var(--eur);border:1px solid #F9E79F"></span>EUR</span>
+        <span class="li"><span class="ld" style="background:var(--aed);border:1px solid #D7BDE2"></span>AED</span>
+      </div>
+      <div class="tw"><table>
+        <thead><tr>
+          <th>م</th><th class="tl">الاسم / العهدة</th><th>الشركة</th><th>العملة</th>
+          <th>الكشف مرفق؟</th>
+          <th>الحساب صحيح؟ (الجديلي)</th>
+          <th>مركز التكلفة؟ (الجديلي)</th>
+          <th>اعتماد المصروف؟</th>
+          <th>وقت التسجيل (الجديلي)</th>
+          <th>الربط صحيح؟ (زيدان)</th>
+          <th>وقت الربط (زيدان)</th>
+          <th>الرصيد</th>
+          <th>الحالة</th>
+        </tr></thead>
+        <tbody id="cash-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════════════════════
+const BANKS = [
+  // ADIB
+  {bank:"ADIB",                        cur:"EGP",code:"ADBEG"},
+  {bank:"ADIB",                        cur:"EUR",code:"ADBEU"},
+  {bank:"ADIB",                        cur:"USD",code:"ADBUS"},
+  // CBD
+  {bank:"Commercial Bank of Dubai",    cur:"AED",code:"CBDAE"},
+  {bank:"Commercial Bank of Dubai",    cur:"EUR",code:"CBDEU"},
+  {bank:"Commercial Bank of Dubai",    cur:"USD",code:"CBDUS"},
+  // CIB
+  {bank:"Commercial International Bank",cur:"EGP",code:"CIBEG"},
+  {bank:"Commercial International Bank",cur:"EUR",code:"CIBEU"},
+  {bank:"Commercial International Bank",cur:"USD",code:"CIBUS"},
+  // Banque du Caire
+  {bank:"Banque du Caire",             cur:"EGP",code:"CarEG"},
+  {bank:"Banque du Caire",             cur:"EUR",code:"CarEU"},
+  {bank:"Banque du Caire",             cur:"USD",code:"CarUS"},
+  // EDB
+  {bank:"Egyptian Export Dev. Bank",   cur:"EGP",code:"EDBEG"},
+  {bank:"Egyptian Export Dev. Bank",   cur:"EUR",code:"EDBEU"},
+  {bank:"Egyptian Export Dev. Bank",   cur:"USD",code:"EDBUS"},
+  // Bank Masr
+  {bank:"Bank Masr",                   cur:"EGP",code:"MsrEG"},
+  {bank:"Bank Masr",                   cur:"EUR",code:"MsrEu"},
+  {bank:"Bank Masr",                   cur:"USD",code:"MsrUS"},
+  // NBE
+  {bank:"National Bank of Egypt",      cur:"EGP",code:"NBEEG"},
+  {bank:"National Bank of Egypt",      cur:"EUR",code:"NBEEU"},
+  {bank:"National Bank of Egypt",      cur:"USD",code:"NBEUS"},
+  // Bank NXT
+  {bank:"Bank NXT",                    cur:"EGP",code:"NxtEG"},
+  {bank:"Bank NXT",                    cur:"EUR",code:"NxtEU"},
+  {bank:"Bank NXT",                    cur:"USD",code:"NxtUS"},
+  // QNB
+  {bank:"QNB ALAHLI",                  cur:"EGP",code:"QNBEG"},
+  {bank:"QNB ALAHLI",                  cur:"EUR",code:"QNBEu"},
+  {bank:"QNB ALAHLI",                  cur:"USD",code:"QNBUS"},
+];
+
+const CASH = [
+  // Energy for Import & Export
+  {name:"Cash EGP",                              company:"Energy",cur:"EGP",type:"خزنة"},
+  {name:"Cash USD",                              company:"Energy",cur:"USD",type:"خزنة"},
+  {name:"Cash AED",                              company:"Energy",cur:"AED",type:"خزنة"},
+  {name:"Cash EUR",                              company:"Energy",cur:"EUR",type:"خزنة"},
+  {name:"أيمن الغباشي EGP",                     company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"أيمن الغباشي USD",                     company:"Energy",cur:"USD",type:"عهدة"},
+  {name:"أيمن الغباشي EUR",                     company:"Energy",cur:"EUR",type:"عهدة"},
+  {name:"أيمن الغباشي AED",                     company:"Energy",cur:"AED",type:"عهدة"},
+  {name:"زاهر محمد",                             company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"محمود مرسي",                            company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"رضا الخضري",                            company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"سمير رشاد محرم",                        company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"احمد مطر",                              company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"عهدة المصروفات الإدارية والعمومية",     company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"بصيص معرف بصيص — انرجي",               company:"Energy",cur:"EGP",type:"عهدة"},
+  {name:"Mr. Amr Elhattab USD",                  company:"Energy",cur:"USD",type:"عهدة"},
+  // ملاحة انرجى المنخفض
+  {name:"بصيص — ملاحة المنخفض",                  company:"ملاحة انرجى المنخفض",cur:"EGP",type:"عهدة"},
+  {name:"بصيص — المختار 2",                       company:"ملاحة انرجى المنخفض",cur:"EGP",type:"عهدة"},
+  {name:"بصيص — المختار لمنخفض 3",               company:"ملاحة انرجى المنخفض",cur:"EGP",type:"عهدة"},
+  // New Alex Tab For Salt
+  {name:"عهدة زاهر محمد — حفار 1",               company:"New Alex Tab For Salt",cur:"EGP",type:"عهدة"},
+  // Home Felix
+  {name:"عهدة انجي",                             company:"Home Felix",cur:"EGP",type:"عهدة"},
+  {name:"Felix Cash",                             company:"Home Felix",cur:"EGP",type:"خزنة"},
+  // كلارك 1
+  {name:"Cash EGP",                              company:"كلارك 1",cur:"EGP",type:"خزنة"},
+];
+
+// State
+const ST = { banks:{}, cash:{} };
+
+// ── Helpers ────────────────────────────────────────────────────────────
+const SO = ['','✓ سليم','! ملاحظات','✕ مخالفة'];
+function curCls(c){return {EGP:'egp',USD:'usd',EUR:'eur',AED:'aed'}[c]||'';}
+function badge(v){
+  if(!v)return'<span class="badge na">—</span>';
+  if(v.includes('سليم')) return`<span class="badge ok">${v}</span>`;
+  if(v.includes('ملاحظات'))return`<span class="badge warn">${v}</span>`;
+  if(v.includes('مخالفة'))return`<span class="badge bad">${v}</span>`;
+  return`<span class="badge na">${v}</span>`;
+}
+function sCls(v){if(!v)return'';if(v.includes('سليم'))return'ok';if(v.includes('ملاحظات'))return'warn';if(v.includes('مخالفة'))return'bad';return'';}
+function mkSel(opts,val,cb){
+  const s=document.createElement('select');
+  s.className='sel '+sCls(val);
+  opts.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o||'—';if(o===val)op.selected=true;s.appendChild(op);});
+  s.onchange=function(){this.className='sel '+sCls(this.value);cb(this.value);recalc();};
+  return s;
+}
+function mkInp(val,cb,ph=''){
+  const i=document.createElement('input');
+  i.className='inp';i.value=val||'';i.placeholder=ph;
+  i.oninput=function(){cb(this.value);};return i;
+}
+function autoSt(checks){
+  const v=Object.values(checks);
+  if(!v.some(x=>x))return'';
+  if(v.some(x=>x.includes('مخالفة')))return'✕ مخالفة';
+  if(v.some(x=>x.includes('ملاحظات')))return'! ملاحظات';
+  if(v.every(x=>x.includes('سليم')))return'✓ سليم';
+  return'';
+}
+
+// ── Build Banks ────────────────────────────────────────────────────────
+function buildBanks(){
+  const tb=document.getElementById('banks-body');tb.innerHTML='';
+  let prev='';
+  BANKS.forEach((b,i)=>{
+    if(!ST.banks[i])ST.banks[i]={c0:'',c1:'',c2:'',c3:'',c4:'',tr:'',c5:'',tl:'',bal:''};
+    const s=ST.banks[i];
+    // Bank group header
+    if(b.bank!==prev){
+      prev=b.bank;
+      const gtr=document.createElement('tr');gtr.className='grp-head';
+      const gtd=document.createElement('td');gtd.colSpan=14;gtd.textContent=`🏦 ${b.bank}`;
+      gtr.appendChild(gtd);tb.appendChild(gtr);
+    }
+    const tr=document.createElement('tr');tr.className=curCls(b.cur);
+    tr.innerHTML=`<td class="mono">${i+1}</td>`;
+    const nameTd=document.createElement('td');nameTd.className='tl';
+    nameTd.innerHTML=`<div style="font-size:11px;font-weight:700">${b.bank}</div><div style="font-size:9px;color:var(--mist)">${b.code}</div>`;
+    tr.appendChild(nameTd);
+    tr.innerHTML+=`</tr>`;
+    // rebuild properly
+    tr.innerHTML='';
+    const n=document.createElement('td');n.className='mono';n.textContent=i+1;tr.appendChild(n);
+    const nm=document.createElement('td');nm.className='tl';
+    nm.innerHTML=`<span style="font-size:11px;font-weight:700">${b.bank}</span><span style="font-size:9px;color:var(--mist);display:block">${b.code}</span>`;
+    tr.appendChild(nm);
+    const cu=document.createElement('td');
+    const curMap={EGP:'egp',USD:'usd',EUR:'eur',AED:'aed'};
+    cu.innerHTML=`<span class="cur ${curMap[b.cur]||''}">${b.cur}</span>`;
+    tr.appendChild(cu);
+    const co=document.createElement('td');co.innerHTML=`<span style="font-size:10px;color:var(--mist)">${b.code}</span>`;tr.appendChild(co);
+    // checks
+    ['c0','c1','c2','c3','c4'].forEach(k=>{const td=document.createElement('td');td.appendChild(mkSel(SO,s[k],v=>s[k]=v));tr.appendChild(td);});
+    const trt=document.createElement('td');trt.appendChild(mkInp(s.tr,v=>s.tr=v,'00:00'));tr.appendChild(trt);
+    const c5t=document.createElement('td');c5t.appendChild(mkSel(SO,s.c5,v=>s.c5=v));tr.appendChild(c5t);
+    const tlt=document.createElement('td');tlt.appendChild(mkInp(s.tl,v=>s.tl=v,'00:00'));tr.appendChild(tlt);
+    const balt=document.createElement('td');balt.appendChild(mkInp(s.bal,v=>s.bal=v,'0.00'));tr.appendChild(balt);
+    const stt=document.createElement('td');stt.id=`bst-${i}`;tr.appendChild(stt);
+    tb.appendChild(tr);
+  });
+}
+
+// ── Build Cash/Custody ─────────────────────────────────────────────────
+function buildCash(){
+  const tb=document.getElementById('cash-body');tb.innerHTML='';
+  let prevCo='';
+  CASH.forEach((c,i)=>{
+    if(!ST.cash[i])ST.cash[i]={c0:'',c1:'',c2:'',c3:'',tr:'',c4:'',tl:'',bal:''};
+    const s=ST.cash[i];
+    if(c.company!==prevCo){
+      prevCo=c.company;
+      const gtr=document.createElement('tr');gtr.className='grp-head';
+      const gtd=document.createElement('td');gtd.colSpan=13;
+      gtd.textContent=`🏢 ${c.company}`;gtr.appendChild(gtd);tb.appendChild(gtr);
+    }
+    const tr=document.createElement('tr');tr.className=curCls(c.cur);
+    const n=document.createElement('td');n.className='mono';n.textContent=i+1;tr.appendChild(n);
+    const nm=document.createElement('td');nm.className='tl';
+    nm.innerHTML=`<span style="font-size:11px;font-weight:700">${c.name}</span><span style="font-size:9px;color:var(--mist);display:block">${c.type}</span>`;
+    tr.appendChild(nm);
+    const co=document.createElement('td');
+    co.innerHTML=`<span style="font-size:10px;color:var(--mist)">${c.company}</span>`;tr.appendChild(co);
+    const cu=document.createElement('td');
+    const curMap2={EGP:'egp',USD:'usd',EUR:'eur',AED:'aed'};
+    cu.innerHTML=`<span class="cur ${curMap2[c.cur]||''}">${c.cur}</span>`;tr.appendChild(cu);
+    ['c0','c1','c2','c3'].forEach(k=>{const td=document.createElement('td');td.appendChild(mkSel(SO,s[k],v=>s[k]=v));tr.appendChild(td);});
+    const trt=document.createElement('td');trt.appendChild(mkInp(s.tr,v=>s.tr=v,'00:00'));tr.appendChild(trt);
+    const c4t=document.createElement('td');c4t.appendChild(mkSel(SO,s.c4,v=>s.c4=v));tr.appendChild(c4t);
+    const tlt=document.createElement('td');tlt.appendChild(mkInp(s.tl,v=>s.tl=v,'00:00'));tr.appendChild(tlt);
+    const balt=document.createElement('td');balt.appendChild(mkInp(s.bal,v=>s.bal=v,'0.00'));tr.appendChild(balt);
+    const stt=document.createElement('td');stt.id=`cst-${i}`;tr.appendChild(stt);
+    tb.appendChild(tr);
+  });
+}
+
+// ── Scoring ────────────────────────────────────────────────────────────
+const EMPS=[
+  {id:'mh', name:'محمد حسن',  role:'تسجيل البنوك',          color:'#1A3A63', src:'banks', keys:['c0','c1','c2','c3','c4'], tl:'tr'},
+  {id:'mz', name:'محمد زيدان',role:'الربط المحاسبي (الكل)',  color:'#1A6B3C', src:'both',  keys:['c5'],                     tl:'tl'},
+  {id:'jd', name:'الجديلي',   role:'تسجيل الخزنة والعهد',   color:'#7D4E00', src:'cash',  keys:['c0','c1','c2','c3'],     tl:'tr'},
+];
+
+function scoreEmp(emp){
+  let ok=0,warn=0,bad=0,total=0,linked=0;
+  const sheets = emp.src==='banks'?['banks']:emp.src==='cash'?['cash']:['banks','cash'];
+  sheets.forEach(sh=>{
+    const data=sh==='banks'?BANKS:CASH;
+    data.forEach((_,i)=>{
+      const s=ST[sh][i];if(!s)return;
+      emp.keys.forEach(k=>{
+        const v=s[k];if(!v)return;
+        total++;
+        if(v.includes('سليم'))ok++;
+        else if(v.includes('ملاحظات'))warn++;
+        else if(v.includes('مخالفة'))bad++;
+      });
+      if(s[emp.tl]&&s[emp.tl].trim())linked++;
+    });
+  });
+  const totalItems=sheets.reduce((a,sh)=>{
+    return a+(sh==='banks'?BANKS:CASH).length;
+  },0)*emp.keys.length;
+  const s1=Math.max(0,Math.min(60,total>0?(ok/total)*60-bad*3-warn*1:0));
+  const s2=Math.max(0,Math.min(40,totalItems>0?(linked/totalItems)*40:0));
+  return{ok,warn,bad,total,s1,s2,score:Math.round((s1+s2)*10)/10};
+}
+
+function ratingOf(s){
+  if(s>=90)return{l:'ممتاز',    bg:'var(--jade-l)', c:'var(--jade)'};
+  if(s>=80)return{l:'جيد جداً',bg:'#C8F7C5',       c:'var(--jade)'};
+  if(s>=70)return{l:'جيد',     bg:'var(--amber-l)', c:'var(--amber)'};
+  if(s>=60)return{l:'مقبول',   bg:'#FFE0B2',        c:'#BF360C'};
+  return       {l:'ضعيف',      bg:'var(--coral-l)', c:'var(--coral)'};
+}
+function axC(p){return p>=.8?'var(--jade)':p>=.5?'var(--amber)':'var(--coral)';}
+
+function buildEvalCards(){
+  const grid=document.getElementById('eval-grid');grid.innerHTML='';
+  EMPS.forEach((emp,ei)=>{
+    const sc=scoreEmp(emp);
+    const g=ratingOf(sc.score);
+    const pct=Math.round(sc.score);
+    const col=axC(pct/100);
+    const card=document.createElement('div');card.className='ecard';
+    card.style.borderTop=`4px solid ${emp.color}`;
+    card.innerHTML=`
+      <div class="ehead" style="background:${emp.color}12;border-bottom:1px solid ${emp.color}22">
+        <div class="eavatar" style="background:${emp.color}">${emp.name[0]}</div>
+        <div><h3 style="color:${emp.color}">${emp.name}</h3><p>${emp.role}</p></div>
+      </div>
+      <div class="ebody">
+        <div class="donut-row">
+          <div class="donut" style="--dc:${col};--dp:${pct}">
+            <span class="donut-val" style="color:${col}">${pct>0?pct:'—'}</span>
+          </div>
+          <div>
+            <div class="score-big" style="color:${col}">${sc.score>0?sc.score:'—'}<span style="font-size:13px;font-weight:400;color:var(--mist)">/100</span></div>
+            <span class="grade-chip" style="background:${g.bg};color:${g.c}">${g.l}</span>
+          </div>
+        </div>
+        <div class="axes">
+          <div class="ax-row">
+            <span class="ax-lbl">دقة التسجيل</span>
+            <div class="ax-track"><div class="ax-fill" style="width:${sc.s1/60*100}%;background:${axC(sc.s1/60)}"></div></div>
+            <span class="ax-score" style="color:${axC(sc.s1/60)}">${sc.s1.toFixed(1)}</span>
+          </div>
+          <div class="ax-row">
+            <span class="ax-lbl">سرعة الربط</span>
+            <div class="ax-track"><div class="ax-fill" style="width:${sc.s2/40*100}%;background:${axC(sc.s2/40)}"></div></div>
+            <span class="ax-score" style="color:${axC(sc.s2/40)}">${sc.s2.toFixed(1)}</span>
+          </div>
+        </div>
+        <div class="estate">
+          <div class="estat" style="background:var(--jade-l)"><div class="sv" style="color:var(--jade)">${sc.ok||'—'}</div><div class="sl">✓ سليم</div></div>
+          <div class="estat" style="background:var(--amber-l)"><div class="sv" style="color:var(--amber)">${sc.warn||'—'}</div><div class="sl">! ملاحظات</div></div>
+          <div class="estat" style="background:var(--coral-l)"><div class="sv" style="color:var(--coral)">${sc.bad||'—'}</div><div class="sl">✕ مخالفات</div></div>
+        </div>
+        <div class="efooter" style="background:${g.bg};color:${g.c}">
+          ${sc.score>0?g.l+' — '+emp.role:'— لم يتم الإدخال بعد —'}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── Recalc ─────────────────────────────────────────────────────────────
+function recalc(){
+  // Bank rows
+  BANKS.forEach((_,i)=>{
+    const s=ST.banks[i];if(!s)return;
+    const st=autoSt({c0:s.c0,c1:s.c1,c2:s.c2,c3:s.c3,c4:s.c4,c5:s.c5});
+    const el=document.getElementById(`bst-${i}`);
+    if(el)el.innerHTML=badge(st);
+  });
+  // Cash rows
+  CASH.forEach((_,i)=>{
+    const s=ST.cash[i];if(!s)return;
+    const st=autoSt({c0:s.c0,c1:s.c1,c2:s.c2,c3:s.c3,c4:s.c4});
+    const el=document.getElementById(`cst-${i}`);
+    if(el)el.innerHTML=badge(st);
+  });
+  // Global KPIs
+  let gOk=0,gW=0,gB=0,gF=0;
+  ['banks','cash'].forEach(sh=>{
+    const data=sh==='banks'?BANKS:CASH;
+    data.forEach((_,i)=>{
+      const s=ST[sh][i];if(!s)return;
+      const keys=sh==='banks'?['c0','c1','c2','c3','c4','c5']:['c0','c1','c2','c3','c4'];
+      keys.forEach(k=>{
+        const v=s[k];if(!v)return;
+        gF++;
+        if(v.includes('سليم'))gOk++;
+        else if(v.includes('ملاحظات'))gW++;
+        else if(v.includes('مخالفة'))gB++;
+      });
+    });
+  });
+  const pct=gF>0?Math.round(gOk/gF*100):null;
+  document.getElementById('g-total').textContent=gF||'—';
+  document.getElementById('g-ok').textContent=gOk||'—';
+  document.getElementById('g-warn').textContent=gW||'—';
+  document.getElementById('g-bad').textContent=gB||'—';
+  document.getElementById('g-pct').textContent=pct!==null?pct+'%':'—%';
+
+  // Date strip
+  const ds=document.getElementById('ds-total');
+  if(ds){ds.textContent=gF||'—';}
+  const dso=document.getElementById('ds-ok');   if(dso)dso.textContent=gOk||'—';
+  const dsw=document.getElementById('ds-warn'); if(dsw)dsw.textContent=gW||'—';
+  const dsb=document.getElementById('ds-bad');  if(dsb)dsb.textContent=gB||'—';
+
+  // Progress bars per accountant
+  function setProg(idV,idF,ok,total,col){
+    const p=total>0?Math.round(ok/total*100):0;
+    const ve=document.getElementById(idV); if(ve)ve.textContent=p+'%';
+    const fe=document.getElementById(idF); if(fe)fe.style.width=p+'%';
+  }
+  // محمد حسن: banks checks c0-c4
+  let mhOk=0,mhT=0;
+  BANKS.forEach((_,i)=>{const s=ST.banks[i];if(!s)return;
+    ['c0','c1','c2','c3','c4'].forEach(k=>{if(!s[k])return;mhT++;if(s[k].includes('سليم'))mhOk++;});});
+  setProg('pr-mh','pf-mh',mhOk,mhT,'var(--blue)');
+  // محمد زيدان: c5 banks + c4 cash
+  let mzOk=0,mzT=0;
+  BANKS.forEach((_,i)=>{const s=ST.banks[i];if(!s||!s.c5)return;mzT++;if(s.c5.includes('سليم'))mzOk++;});
+  CASH.forEach((_,i)=>{const s=ST.cash[i];if(!s||!s.c4)return;mzT++;if(s.c4.includes('سليم'))mzOk++;});
+  setProg('pr-mz','pf-mz',mzOk,mzT,'var(--jade)');
+  // الجديلي: cash c0-c3
+  let jdOk=0,jdT=0;
+  CASH.forEach((_,i)=>{const s=ST.cash[i];if(!s)return;
+    ['c0','c1','c2','c3'].forEach(k=>{if(!s[k])return;jdT++;if(s[k].includes('سليم'))jdOk++;});});
+  setProg('pr-jd','pf-jd',jdOk,jdT,'var(--amber)');
+  // overall
+  const allP=gF>0?Math.round(gOk/gF*100):0;
+  const pa=document.getElementById('pr-all');if(pa)pa.textContent=allP+'%';
+  const pfa=document.getElementById('pf-all');if(pfa)pfa.style.width=allP+'%';
+
+  buildEvalCards();
+}
+
+// ── Navigation ─────────────────────────────────────────────────────────
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Date management ─────────────────────────────────────────────────────
+const START=new Date(2026,5,27);
+function loadDate(){const s=localStorage.getItem('audit_date');return s?new Date(s):new Date(START);}
+function saveDate(d){localStorage.setItem('audit_date',d.toISOString());}
+function fmt(d){return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;}
+let RDATE=loadDate();
+function updateDate(){
+  document.getElementById('report-day').textContent=fmt(RDATE);
+  const dd=document.getElementById('date-display');
+  if(dd)dd.textContent=RDATE.toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+function updateClock(){
+  const n=new Date();
+  const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  const el=document.getElementById('ds-time');if(el)el.textContent=t;
+}
+setInterval(updateClock,60000);
+
+function saveDaily(){
+  const d=RDATE;
+  const fname=`تقرير_يومي_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.html`;
+  const content=document.documentElement.outerHTML.replace(/<title>.*?<\/title>/,`<title>تقرير يومي — ${fmt(d)}</title>`);
+  const blob=new Blob([content],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();URL.revokeObjectURL(a.href);
+  pushToGitHub(content,d);
+}
+
+async function pushToGitHub(htmlContent, d) {
+  const owner  = 'A2Z-2025';
+  const repo   = 'Energy-reporting';
+  const path   = 'banks/index.html';
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const dd     = String(d.getDate()).padStart(2,'0');
+  const mm     = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy   = d.getFullYear();
+
+  let token = localStorage.getItem('gh_token');
+  if(!token) {
+    token = prompt('🔑 أدخلي GitHub Token (مرة واحدة فقط):');
+    if(!token) return;
+    localStorage.setItem('gh_token', token);
+  }
+
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A3A63;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
+  t.textContent = '⏳ جارٍ الرفع على GitHub...';
+  document.body.appendChild(t);
+
+  try {
+    const getRes  = await fetch(apiUrl, {headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json'}});
+    const getData = await getRes.json();
+    const sha     = getData.sha || null;
+    const encoded = btoa(unescape(encodeURIComponent(htmlContent)));
+    const putRes  = await fetch(apiUrl, {
+      method:'PUT',
+      headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body: JSON.stringify({message:`تقرير بنوك وخزنة ${dd}/${mm}/${yyyy}`,content:encoded,...(sha?{sha}:{})})
+    });
+    t.remove();
+    if(putRes.ok) {
+      const s = document.createElement('div');
+      s.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A6B3C;color:#fff;padding:14px 28px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;text-align:center';
+      s.innerHTML = `✅ تم الرفع!<br><a href="https://a2z-2025.github.io/Energy-reporting/banks/" target="_blank" style="color:#A3D977;font-size:12px">a2z-2025.github.io/Energy-reporting/banks/</a>`;
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),7000);
+    } else {
+      const err = await putRes.json();
+      if(err.message?.includes('Bad credentials')) { localStorage.removeItem('gh_token'); }
+      throw new Error(err.message||'فشل');
+    }
+  } catch(e) {
+    t.remove();
+    const er = document.createElement('div');
+    er.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#8B1A1A;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
+    er.textContent = `⚠️ ${e.message||'فشل الرفع'} — تم الحفظ محلياً`;
+    document.body.appendChild(er);
+    setTimeout(()=>er.remove(),5000);
+  }
+}
+
+function nextDay(){
+  const next=new Date(RDATE);next.setDate(next.getDate()+1);
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  ov.innerHTML=`<div style="background:#fff;border-radius:14px;padding:28px;max-width:400px;width:90%;direction:rtl;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="font-size:32px;margin-bottom:10px">⏭</div>
+    <h2 style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:8px">الانتقال ليوم جديد</h2>
+    <p style="font-size:20px;font-weight:800;color:#1A6B3C;margin-bottom:12px">${fmt(next)}</p>
+    <div style="background:#FFF8E1;border-radius:7px;padding:10px;margin-bottom:16px;font-size:11px;color:#7D4E00;">⚠️ تأكد من حفظ نسخة اليوم الحالي أولاً</div>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button onclick="confirmNext('${next.toISOString()}',this)" style="background:var(--navy);color:#fff;border:none;border-radius:7px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">انتقل إلى ${fmt(next)}</button>
+      <button onclick="this.closest('div').parentElement.parentElement.remove()" style="background:var(--wire);color:var(--slate);border:none;border-radius:7px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">إلغاء</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+}
+
+function confirmNext(iso,btn){
+  RDATE=new Date(iso);saveDate(RDATE);
+  // Reset state
+  BANKS.forEach((_,i)=>{ST.banks[i]={c0:'',c1:'',c2:'',c3:'',c4:'',tr:'',c5:'',tl:'',bal:''};});
+  CASH.forEach((_,i)=>{ST.cash[i]={c0:'',c1:'',c2:'',c3:'',tr:'',c4:'',tl:'',bal:''};});
+  buildBanks();buildCash();recalc();updateDate();updateClock();
+  btn.closest('div').parentElement.parentElement.remove();
+  toast(`✅ تم الانتقال إلى ${fmt(RDATE)}`);
+}
+
+function toast(msg){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;z-index:9999;';
+  t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
+}
+
+// ── Init ────────────────────────────────────────────────────────────────
+buildBanks();buildCash();recalc();updateDate();updateClock();
+
+// ── Charts ──────────────────────────────────────────────────────────────
+let barChart=null, donutChart=null, radarChart=null;
+
+function initCharts(){
+  const chartDefaults={
+    font:{family:"'IBM Plex Sans Arabic',sans-serif"},
+    color:'#64748B',
+  };
+  Chart.defaults.font.family="'IBM Plex Sans Arabic',sans-serif";
+  Chart.defaults.color='#64748B';
+
+  // Bar chart
+  const bCtx=document.getElementById('barChart');
+  if(bCtx){
+    barChart=new Chart(bCtx,{
+      type:'bar',
+      data:{
+        labels:['محمد حسن','محمد زيدان','الجديلي'],
+        datasets:[{
+          label:'نسبة الامتثال %',
+          data:[0,0,0],
+          backgroundColor:['rgba(55,138,221,.8)','rgba(29,158,117,.8)','rgba(186,117,23,.8)'],
+          borderColor:['#378ADD','#1D9E75','#BA7517'],
+          borderWidth:1.5,
+          borderRadius:6,
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          tooltip:{
+            callbacks:{label:ctx=>`${Math.round(ctx.raw)}%`}
+          }
+        },
+        scales:{
+          y:{
+            min:0,max:100,
+            grid:{color:'rgba(0,0,0,.04)'},
+            ticks:{callback:v=>v+'%',font:{size:10}},
+          },
+          x:{grid:{display:false},ticks:{font:{size:11}}}
+        }
+      }
+    });
+  }
+
+  // Donut chart
+  const dCtx=document.getElementById('donutChart');
+  if(dCtx){
+    donutChart=new Chart(dCtx,{
+      type:'doughnut',
+      data:{
+        labels:['سليم','ملاحظات','مخالفات','لم يُدخَل'],
+        datasets:[{
+          data:[0,0,0,1],
+          backgroundColor:['#1D9E75','#BA7517','#E24B4A','#E2E8F0'],
+          borderColor:['#fff','#fff','#fff','#fff'],
+          borderWidth:2,
+        }]
+      },
+      options:{
+        responsive:false,
+        cutout:'70%',
+        plugins:{
+          legend:{
+            position:'bottom',
+            labels:{font:{size:10},padding:8,boxWidth:10}
+          },
+          tooltip:{
+            callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}`}
+          }
+        }
+      }
+    });
+  }
+
+  // Radar chart
+  const rCtx=document.getElementById('radarChart');
+  if(rCtx){
+    radarChart=new Chart(rCtx,{
+      type:'radar',
+      data:{
+        labels:['دقة التسجيل','سرعة الربط','الامتثال الكلي'],
+        datasets:[
+          {label:'محمد حسن',data:[0,0,0],
+            backgroundColor:'rgba(55,138,221,.15)',
+            borderColor:'#378ADD',pointBackgroundColor:'#378ADD',
+            borderWidth:2,pointRadius:3},
+          {label:'محمد زيدان',data:[0,0,0],
+            backgroundColor:'rgba(29,158,117,.15)',
+            borderColor:'#1D9E75',pointBackgroundColor:'#1D9E75',
+            borderWidth:2,pointRadius:3},
+          {label:'الجديلي',data:[0,0,0],
+            backgroundColor:'rgba(186,117,23,.15)',
+            borderColor:'#BA7517',pointBackgroundColor:'#BA7517',
+            borderWidth:2,pointRadius:3},
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        scales:{
+          r:{
+            min:0,max:100,
+            grid:{color:'rgba(0,0,0,.06)'},
+            angleLines:{color:'rgba(0,0,0,.06)'},
+            ticks:{display:false},
+            pointLabels:{font:{size:10}}
+          }
+        },
+        plugins:{
+          legend:{
+            position:'bottom',
+            labels:{font:{size:10},padding:8,boxWidth:10}
+          }
+        }
+      }
+    });
+  }
+}
+
+function updateCharts(){
+  if(!barChart||!donutChart||!radarChart) return;
+
+  // Calc per-accountant stats
+  const emps=EMPS.map(emp=>scoreEmp(emp));
+
+  // Bar chart data
+  const barPcts=emps.map(sc=>sc.score);
+  barChart.data.datasets[0].data=barPcts;
+  barChart.update();
+
+  // Donut chart data — global ok/warn/bad
+  let gOk=0,gW=0,gB=0,gF=0;
+  ['banks','cash'].forEach(sh=>{
+    const data=sh==='banks'?BANKS:CASH;
+    data.forEach((_,i)=>{
+      const s=ST[sh][i];if(!s)return;
+      const keys=sh==='banks'?['c0','c1','c2','c3','c4','c5']:['c0','c1','c2','c3','c4'];
+      keys.forEach(k=>{
+        const v=s[k];if(!v)return;
+        gF++;
+        if(v.includes('سليم'))gOk++;
+        else if(v.includes('ملاحظات'))gW++;
+        else if(v.includes('مخالفة'))gB++;
+      });
+    });
+  });
+  const none=Math.max(0,50-gF);
+  donutChart.data.datasets[0].data=[gOk,gW,gB,none>0?none:0];
+  donutChart.update();
+
+  // Radar chart — 3 axes per accountant
+  emps.forEach((sc,i)=>{
+    const total=sc.ok+sc.warn+sc.bad;
+    const accuracy=total>0?Math.round(sc.ok/total*100):0;
+    const speed=Math.round(sc.s2/40*100);
+    const compliance=Math.round(sc.score);
+    radarChart.data.datasets[i].data=[accuracy,speed,compliance];
+  });
+  radarChart.update();
+}
+
+// Init charts after DOM ready
+setTimeout(()=>{
+  initCharts();
+  updateCharts();
+},200);
+
+// Override recalc to also update charts
+const _recalc=recalc;
+recalc=function(){
+  _recalc();
+  if(barChart) updateCharts();
+};
+</script>
+</body>
+</html>
