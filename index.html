@@ -307,7 +307,7 @@ tbody td.tmono { font-family: 'IBM Plex Mono',monospace; font-size: 12px; }
   </div>
   <div class="topbar-meta">
     <div class="meta-pill">📅 التاريخ: <span id="hdate">السبت، ٢٧ يونيو ٢٠٢٦</span></div>
-    <div class="meta-pill">⏱ <span id="htime">٠٤:١٩ م</span></div>
+    <div class="meta-pill">⏱ <span id="htime">٠٩:٥٦ م</span></div>
     <div class="meta-pill">نسبة الامتثال الكلية: <span id="global-pct">—%</span></div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
@@ -317,12 +317,7 @@ tbody td.tmono { font-family: 'IBM Plex Mono',monospace; font-size: 12px; }
       <button onclick="saveDaily()" style="background: var(--gold); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 8px 18px; font-family: inherit; font-size: 13px; font-weight: 700; color: rgb(11, 31, 58); cursor: pointer; transition: opacity 0.2s; white-space: nowrap; opacity: 0.85;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
         💾 حفظ نسخة اليوم
       </button>
-      <button onclick="nextDay()" style="
-        background:#1A6B3C;border:none;border-radius:8px;
-        padding:8px 18px;font-family:inherit;font-size:13px;
-        font-weight:700;color:#fff;cursor:pointer;
-        transition:opacity .2s;white-space:nowrap;
-      " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      <button onclick="nextDay()" style="background: rgb(26, 107, 60); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 8px 18px; font-family: inherit; font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); cursor: pointer; transition: opacity 0.2s; white-space: nowrap; opacity: 1;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
         ⏭ يوم جديد
       </button>
     </div>
@@ -1577,6 +1572,7 @@ function saveDaily() {
     .replace(/id="hdate">.*?<\/span>/,
       `id="hdate">${formatArabic(d)}</span>`);
 
+  // Download locally
   const blob = new Blob([currentHTML], {type:'text/html;charset=utf-8'});
   const a    = document.createElement('a');
   a.href     = URL.createObjectURL(blob);
@@ -1584,86 +1580,56 @@ function saveDaily() {
   a.click();
   URL.revokeObjectURL(a.href);
 
-  showDeployModal(fname, d);
+  // Push to GitHub Pages
+  pushToGitHub(currentHTML, d);
 }
 
-function nextDay() {
-  // Confirm before clearing
-  const overlay = document.createElement('div');
-  overlay.style.cssText = `
-    position:fixed;inset:0;background:rgba(0,0,0,.6);
-    z-index:9999;display:flex;align-items:center;justify-content:center;
-  `;
-  const next = new Date(REPORT_DATE);
-  next.setDate(next.getDate() + 1);
-  const nextStr = formatDisplay(next);
+async function pushToGitHub(htmlContent, d) {
+  const token   = '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';
+  const owner   = 'A2Z-2025';
+  const repo    = 'Energy-reporting';
+  const dd      = String(d.getDate()).padStart(2,'0');
+  const mm      = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy    = d.getFullYear();
+  const path    = `${dd}-${mm}-${yyyy}.html`;
+  const apiUrl  = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 
-  overlay.innerHTML = `
-    <div style="
-      background:#fff;border-radius:16px;padding:32px;
-      max-width:460px;width:90%;direction:rtl;
-      box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center;
-    ">
-      <div style="font-size:36px;margin-bottom:12px">⏭</div>
-      <h2 style="font-size:17px;font-weight:800;color:#0B1F3A;margin-bottom:8px">
-        الانتقال ليوم جديد
-      </h2>
-      <p style="font-size:13px;color:#718096;margin-bottom:6px">
-        هينتقل التقرير إلى يوم
-      </p>
-      <p style="font-size:22px;font-weight:800;color:#1A6B3C;margin-bottom:8px">
-        ${nextStr}
-      </p>
-      <div style="background:#FFF8E1;border-radius:8px;padding:12px;margin-bottom:20px;font-size:12px;color:#7D4E00;text-align:right;">
-        ⚠️ تأكدي إنك حفظتي نسخة اليوم الحالي أولاً قبل الانتقال
-      </div>
-      <div style="display:flex;gap:10px;justify-content:center;">
-        <button onclick="confirmNextDay(this)" data-next="${next.toISOString()}" style="
-          background:#1A6B3C;color:#fff;border:none;border-radius:8px;
-          padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;
-        ">نعم، انتقل للتاريخ ${nextStr}</button>
-        <button onclick="this.closest('div').parentElement.parentElement.remove()" style="
-          background:#E9ECEF;color:#4A5568;border:none;border-radius:8px;
-          padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;
-        ">إلغاء</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A3A63;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  t.textContent = '⏳ جارٍ الرفع على GitHub...';
+  document.body.appendChild(t);
+
+  try {
+    // Base64 encode
+    const encoded = btoa(unescape(encodeURIComponent(htmlContent)));
+
+    // Push new dated file
+    const putRes = await fetch(apiUrl, {
+      method:'PUT',
+      headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body: JSON.stringify({message:`تقرير يوم ${dd}/${mm}/${yyyy}`,content:encoded})
+    });
+
+    t.remove();
+    if(putRes.ok) {
+      const s=document.createElement('div');
+      s.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A6B3C;color:#fff;padding:14px 28px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+      s.innerHTML=`✅ تم الرفع بنجاح!<br><a href="https://a2z-2025.github.io/Energy-reporting/${path}" target="_blank" style="color:#A3D977">https://a2z-2025.github.io/Energy-reporting/${path}</a>`;
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),7000);
+    } else {
+      throw new Error('failed');
+    }
+  } catch(e) {
+    t.remove();
+    const er=document.createElement('div');
+    er.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#8B1A1A;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999';
+    er.textContent='⚠️ فشل الرفع — تم الحفظ محلياً فقط';
+    document.body.appendChild(er);
+    setTimeout(()=>er.remove(),4000);
+  }
 }
 
-function confirmNextDay(btn) {
-  const next = new Date(btn.dataset.next);
-  REPORT_DATE = next;
-  saveReportDate(next);
-
-  // Reset all STATE
-  Object.keys(STATE).forEach(sheet => {
-    Object.keys(STATE[sheet]).forEach(k => delete STATE[sheet][k]);
-  });
-
-  // Rebuild tables fresh
-  buildPO(); buildRec(); buildInv(); buildRecon();
-  buildEvalCards();
-  updateDateDisplay();
-  recalc();
-
-  // Close modal
-  btn.closest('div').parentElement.parentElement.remove();
-
-  // Toast
-  const toast = document.createElement('div');
-  toast.style.cssText = `
-    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-    background:#1A6B3C;color:#fff;padding:12px 24px;border-radius:10px;
-    font-size:13px;font-weight:700;z-index:9999;
-    box-shadow:0 4px 20px rgba(0,0,0,.2);
-  `;
-  toast.textContent = `✅ تم الانتقال إلى ${formatDisplay(next)}`;
-  document.body.appendChild(toast);
-  setTimeout(()=>toast.remove(), 3000);
-}
 
 function showDeployModal(fname, d) {
   const overlay = document.createElement('div');
